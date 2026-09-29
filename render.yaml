@@ -1,0 +1,20 @@
+# Render Blueprint for the public Supplychainer demo (free plan: 512 MB RAM, sleeps when idle).
+services:
+  - type: web
+    name: supplychainer
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.8
+      # No login on the public demo, so webhooks (outbound requests to any URL) are switched off.
+      - key: PUBLIC_MODE
+        value: "true"
+      # PyTorch + the embedding model don't fit in 512 MB; live news falls back to keyword scoring.
+      - key: NLP_ENABLED
+        value: "false"
+      - key: SUPPLYCHAINER_DB
+        value: /tmp/supplychainer.db

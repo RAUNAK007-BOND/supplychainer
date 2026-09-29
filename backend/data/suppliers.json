@@ -1,0 +1,72 @@
+[
+  {
+    "id": "SUP-GLOBAL-01",
+    "name": "Global Dynamics Manufacturing",
+    "category": "Electronics",
+    "location_hub": "PORT-SHANGHAI",
+    "unit_cost": 420.00,
+    "base_lead_time_days": 14.0,
+    "historical_reliability": 0.95,
+    "transit_choke_points": ["CHOKE-MALACCA", "CHOKE-SUEZ"]
+  },
+  {
+    "id": "SUP-RESIL-02",
+    "name": "Resilient Circuits India",
+    "category": "Electronics",
+    "location_hub": "PORT-CHENNAI",
+    "unit_cost": 480.00,
+    "base_lead_time_days": 5.0,
+    "historical_reliability": 0.92,
+    "transit_choke_points": []
+  },
+  {
+    "id": "SUP-EURO-03",
+    "name": "EuroCore Systems",
+    "category": "Electronics",
+    "location_hub": "PORT-ROTTERDAM",
+    "unit_cost": 550.00,
+    "base_lead_time_days": 3.0,
+    "historical_reliability": 0.97,
+    "transit_choke_points": []
+  },
+  {
+    "id": "SUP-ME-04",
+    "name": "Desert Tech Solutions",
+    "category": "Electronics",
+    "location_hub": "PORT-JEBEL",
+    "unit_cost": 440.00,
+    "base_lead_time_days": 8.0,
+    "historical_reliability": 0.88,
+    "transit_choke_points": ["CHOKE-HORMUZ"]
+  },
+  {
+    "id": "SUP-RAW-05",
+    "name": "Steel-Core India",
+    "category": "Raw Materials",
+    "location_hub": "RAIL-KOLKATA",
+    "unit_cost": 1200.00,
+    "base_lead_time_days": 10.0,
+    "historical_reliability": 0.85,
+    "transit_choke_points": []
+  },
+  {
+    "id": "SUP-CHEM-06",
+    "name": "Petro-Nexus Singapore",
+    "category": "Chemicals",
+    "location_hub": "AIR-CHANGI",
+    "unit_cost": 850.00,
+    "base_lead_time_days": 4.0,
+    "historical_reliability": 0.94,
+    "transit_choke_points": ["CHOKE-MALACCA"]
+  },
+  {
+    "id": "SUP-RAW-07",
+    "name": "Northern Mining Corp",
+    "category": "Raw Materials",
+    "location_hub": "RAIL-DELHI",
+    "unit_cost": 1100.00,
+    "base_lead_time_days": 12.0,
+    "historical_reliability": 0.82,
+    "transit_choke_points": []
+  }
+]

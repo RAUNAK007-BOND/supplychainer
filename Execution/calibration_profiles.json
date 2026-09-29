@@ -1,0 +1,30 @@
+{
+    "air": {
+        "floor": 2.1,
+        "cap": 72.0,
+        "p5_observed": 2.1,
+        "p95_observed": 82.4,
+        "derivation": "Derived from historical p5/p95 logistics percentile analysis on geographic node corpora."
+    },
+    "road": {
+        "floor": 2.6,
+        "cap": 68.2,
+        "p5_observed": 2.6,
+        "p95_observed": 68.2,
+        "derivation": "Derived from historical p5/p95 logistics percentile analysis on geographic node corpora."
+    },
+    "sea": {
+        "floor": 20.6,
+        "cap": 360.0,
+        "p5_observed": 20.6,
+        "p95_observed": 1169.9,
+        "derivation": "Derived from historical p5/p95 logistics percentile analysis on geographic node corpora."
+    },
+    "rail": {
+        "floor": 8.8,
+        "cap": 122.6,
+        "p5_observed": 8.8,
+        "p95_observed": 122.6,
+        "derivation": "Derived from historical p5/p95 logistics percentile analysis on geographic node corpora."
+    }
+}

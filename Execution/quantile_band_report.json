@@ -1,0 +1,14 @@
+{
+  "p50": {
+    "target_quantile": 0.5,
+    "empirical_test_coverage": 0.506
+  },
+  "p95": {
+    "target_quantile": 0.95,
+    "empirical_test_coverage": 0.9482
+  },
+  "p85": {
+    "target_quantile": 0.85,
+    "empirical_test_coverage": 0.8506
+  }
+}

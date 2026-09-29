@@ -1,0 +1,11 @@
+{
+  "total": 299,
+  "part4_added": 63,
+  "types": {
+    "choke_point": 14,
+    "port": 127,
+    "airport": 60,
+    "rail_hub": 59,
+    "distribution_hub": 39
+  }
+}

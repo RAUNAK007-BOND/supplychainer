@@ -1,0 +1,1584 @@
+{
+  "Kochi": {
+    "sea": "PORT-KOCHI",
+    "rail": "RAIL-KOCHI",
+    "air": "AIR-COK",
+    "road": "DC-KOCHI"
+  },
+  "Mumbai": {
+    "sea": "PORT-MUMBAI",
+    "rail": "RAIL-NHAVASHEVA",
+    "air": "AIR-MUMBAI",
+    "road": "HUB-MUMBAI"
+  },
+  "Delhi": {
+    "air": "AIR-DELHI",
+    "rail": "RAIL-DELHI",
+    "road": "ICD-DELHI"
+  },
+  "Shanghai": {
+    "sea": "PORT-SHANGHAI",
+    "air": "AIR-SHANGHAI",
+    "rail": "RAIL-SHANGHAI",
+    "road": "HUB-SHANGHAI"
+  },
+  "Singapore": {
+    "sea": "PORT-SINGAPORE",
+    "air": "AIR-CHANGI",
+    "road": "HUB-SINGAPORE"
+  },
+  "Dubai": {
+    "sea": "PORT-JEBEL",
+    "air": "AIR-DUBAI",
+    "road": "HUB-DUBAI"
+  },
+  "Rotterdam": {
+    "sea": "PORT-ROTTERDAM",
+    "road": "HUB-ROTTERDAM",
+    "rail": "RAIL-ROTTERDAM"
+  },
+  "London": {
+    "air": "AIR-HEATHROW",
+    "road": "AIR-HEATHROW",
+    "rail": "AIR-HEATHROW"
+  },
+  "Chicago": {
+    "air": "AIR-CHICAGO",
+    "rail": "RAIL-CHICAGO",
+    "road": "RAIL-CHICAGO"
+  },
+  "San Francisco": {
+    "air": "AIR-SFO",
+    "road": "HUB-SFO"
+  },
+  "Kolkata": {
+    "rail": "RAIL-KOLKATA",
+    "road": "RAIL-KOLKATA"
+  },
+  "Hamburg": {
+    "sea": "PORT-HAMBURG",
+    "rail": "RAIL-HAMBURG",
+    "road": "HUB-HAMBURG"
+  },
+  "Los Angeles": {
+    "sea": "PORT-LOSANGELES",
+    "rail": "RAIL-LOSANGELES",
+    "air": "AIR-LAX",
+    "road": "HUB-LOSANGELES"
+  },
+  "New York": {
+    "sea": "PORT-NEWYORK",
+    "air": "AIR-JFK",
+    "road": "HUB-NEWYORK",
+    "rail": "RAIL-NEWYORK"
+  },
+  "Hong Kong": {
+    "air": "AIR-HONGKONG",
+    "sea": "PORT-HONGKONG",
+    "road": "PORT-HONGKONG"
+  },
+  "Suez Canal": {
+    "sea": "CHOKE-SUEZ"
+  },
+  "Panama Canal": {
+    "sea": "CHOKE-PANAMA"
+  },
+  "Malacca": {
+    "sea": "CHOKE-MALACCA"
+  },
+  "Hormuz": {
+    "sea": "CHOKE-HORMUZ"
+  },
+  "Bab el-Mandeb Strait": {
+    "sea": "CHOKE-BABEL"
+  },
+  "Bosphorus Strait": {
+    "sea": "CHOKE-BOSPHO"
+  },
+  "Gibraltar": {
+    "sea": "CHOKE-GIBRAL"
+  },
+  "Dover Strait": {
+    "sea": "CHOKE-DOVER"
+  },
+  "Ningbo-Zhoushan": {
+    "sea": "PORT-NINGBO",
+    "road": "PORT-NINGBO",
+    "rail": "PORT-NINGBO"
+  },
+  "Shenzhen": {
+    "sea": "PORT-SHENZHEN",
+    "road": "PORT-SHENZHEN",
+    "rail": "PORT-SHENZHEN"
+  },
+  "Guangzhou": {
+    "sea": "PORT-GUANGZHOU",
+    "road": "PORT-GUANGZHOU",
+    "rail": "PORT-GUANGZHOU"
+  },
+  "Qingdao": {
+    "sea": "PORT-QINGDAO",
+    "road": "PORT-QINGDAO",
+    "rail": "PORT-QINGDAO"
+  },
+  "Tianjin": {
+    "sea": "PORT-TIANJIN",
+    "road": "PORT-TIANJIN",
+    "rail": "PORT-TIANJIN"
+  },
+  "Busan": {
+    "sea": "PORT-BUSAN",
+    "road": "PORT-BUSAN",
+    "rail": "PORT-BUSAN"
+  },
+  "Kaohsiung": {
+    "sea": "PORT-KAOHSIUNG",
+    "road": "PORT-KAOHSIUNG",
+    "rail": "PORT-KAOHSIUNG"
+  },
+  "Tokyo": {
+    "sea": "PORT-TOKYO",
+    "road": "PORT-TOKYO",
+    "rail": "PORT-TOKYO"
+  },
+  "Yokohama": {
+    "sea": "PORT-YOKOHAMA",
+    "road": "PORT-YOKOHAMA",
+    "rail": "PORT-YOKOHAMA"
+  },
+  "Laem Chabang": {
+    "sea": "PORT-LAEMCHA",
+    "road": "PORT-LAEMCHA",
+    "rail": "PORT-LAEMCHA"
+  },
+  "Ho Chi Minh City": {
+    "sea": "PORT-HOCHIMINH",
+    "road": "PORT-HOCHIMINH"
+  },
+  "Port Klang": {
+    "sea": "PORT-PORTKLANG",
+    "road": "PORT-PORTKLANG",
+    "rail": "PORT-PORTKLANG"
+  },
+  "Tanjung Pelepas": {
+    "sea": "PORT-TPELEPAS",
+    "road": "PORT-TPELEPAS"
+  },
+  "Colombo": {
+    "sea": "PORT-COLOMBO",
+    "road": "PORT-COLOMBO"
+  },
+  "Mundra": {
+    "sea": "PORT-MUNDRA",
+    "road": "PORT-MUNDRA",
+    "rail": "PORT-MUNDRA"
+  },
+  "Chennai": {
+    "sea": "PORT-CHENNAI",
+    "road": "PORT-CHENNAI",
+    "rail": "PORT-CHENNAI",
+    "air": "AIR-CHENNAI"
+  },
+  "Visakhapatnam": {
+    "sea": "PORT-VIZAG",
+    "road": "PORT-VIZAG",
+    "rail": "PORT-VIZAG"
+  },
+  "Deendayal": {
+    "sea": "PORT-KANDLA",
+    "road": "PORT-KANDLA",
+    "rail": "PORT-KANDLA"
+  },
+  "Jeddah Islamic": {
+    "sea": "PORT-JEDDAH",
+    "road": "PORT-JEDDAH"
+  },
+  "Salalah": {
+    "sea": "PORT-SALALAH",
+    "road": "PORT-SALALAH"
+  },
+  "Djibouti": {
+    "sea": "PORT-DJIBOUTI",
+    "road": "PORT-DJIBOUTI",
+    "rail": "PORT-DJIBOUTI"
+  },
+  "Durban": {
+    "sea": "PORT-DURBAN",
+    "road": "PORT-DURBAN",
+    "rail": "PORT-DURBAN"
+  },
+  "Tanger Med": {
+    "sea": "PORT-TANGIER",
+    "road": "PORT-TANGIER",
+    "rail": "PORT-TANGIER"
+  },
+  "Mombasa": {
+    "sea": "PORT-MOMBASA",
+    "road": "PORT-MOMBASA",
+    "rail": "PORT-MOMBASA"
+  },
+  "Antwerp-Bruges": {
+    "sea": "PORT-ANTWERP",
+    "road": "PORT-ANTWERP",
+    "rail": "PORT-ANTWERP"
+  },
+  "Felixstowe": {
+    "sea": "PORT-FELIXSTOWE",
+    "road": "PORT-FELIXSTOWE",
+    "rail": "PORT-FELIXSTOWE"
+  },
+  "Piraeus": {
+    "sea": "PORT-PIRAEUS",
+    "road": "PORT-PIRAEUS",
+    "rail": "PORT-PIRAEUS"
+  },
+  "Valencia": {
+    "sea": "PORT-VALENCIA",
+    "road": "PORT-VALENCIA",
+    "rail": "PORT-VALENCIA"
+  },
+  "Le Havre": {
+    "sea": "PORT-LEHAVRE",
+    "road": "PORT-LEHAVRE",
+    "rail": "PORT-LEHAVRE"
+  },
+  "Gdansk": {
+    "sea": "PORT-GDANSK",
+    "road": "PORT-GDANSK",
+    "rail": "PORT-GDANSK"
+  },
+  "Gothenburg": {
+    "sea": "PORT-GOTHENBURG",
+    "road": "PORT-GOTHENBURG",
+    "rail": "PORT-GOTHENBURG"
+  },
+  "Long Beach": {
+    "sea": "PORT-LONGBEACH",
+    "road": "PORT-LONGBEACH",
+    "rail": "PORT-LONGBEACH"
+  },
+  "Savannah": {
+    "sea": "PORT-SAVANNAH",
+    "road": "PORT-SAVANNAH",
+    "rail": "PORT-SAVANNAH"
+  },
+  "Houston": {
+    "sea": "PORT-HOUSTON",
+    "road": "PORT-HOUSTON",
+    "rail": "PORT-HOUSTON"
+  },
+  "Vancouver": {
+    "sea": "PORT-VANCOUVER",
+    "road": "PORT-VANCOUVER",
+    "rail": "PORT-VANCOUVER"
+  },
+  "Santos": {
+    "sea": "PORT-SANTOS",
+    "road": "PORT-SANTOS",
+    "rail": "PORT-SANTOS"
+  },
+  "Colon": {
+    "sea": "PORT-COLON",
+    "road": "PORT-COLON"
+  },
+  "Manzanillo": {
+    "sea": "PORT-MANZANILLO",
+    "road": "PORT-MANZANILLO",
+    "rail": "PORT-MANZANILLO"
+  },
+  "Charleston": {
+    "sea": "PORT-CHARLESTON",
+    "road": "PORT-CHARLESTON",
+    "rail": "PORT-CHARLESTON"
+  },
+  "Hong Kong International": {
+    "air": "AIR-HONGKONG",
+    "road": "AIR-HONGKONG"
+  },
+  "Memphis International": {
+    "air": "AIR-MEMPHIS",
+    "road": "AIR-MEMPHIS"
+  },
+  "Incheon International": {
+    "air": "AIR-INCHEON",
+    "road": "AIR-INCHEON",
+    "rail": "AIR-INCHEON"
+  },
+  "Ted Stevens Anchorage Intl": {
+    "air": "AIR-ANCHORAGE",
+    "road": "AIR-ANCHORAGE"
+  },
+  "Al Maktoum International": {
+    "air": "AIR-DWC",
+    "road": "AIR-DWC"
+  },
+  "Louisville Muhammad Ali Intl": {
+    "air": "AIR-LOUISVILLE",
+    "road": "AIR-LOUISVILLE"
+  },
+  "Narita International": {
+    "air": "AIR-NARITA",
+    "road": "AIR-NARITA",
+    "rail": "AIR-NARITA"
+  },
+  "Taoyuan International": {
+    "air": "AIR-TAIPEI",
+    "road": "AIR-TAIPEI"
+  },
+  "Frankfurt": {
+    "air": "AIR-FRANKFURT",
+    "road": "AIR-FRANKFURT",
+    "rail": "AIR-FRANKFURT"
+  },
+  "Amsterdam Schiphol": {
+    "air": "AIR-SCHIPHOL",
+    "road": "AIR-SCHIPHOL",
+    "rail": "AIR-SCHIPHOL"
+  },
+  "Paris Charles de Gaulle": {
+    "air": "AIR-CDGPARIS",
+    "road": "AIR-CDGPARIS",
+    "rail": "AIR-CDGPARIS"
+  },
+  "London Heathrow": {
+    "air": "AIR-HEATHROW",
+    "road": "AIR-HEATHROW",
+    "rail": "AIR-HEATHROW"
+  },
+  "Leipzig/Halle": {
+    "air": "AIR-LEIPZIG",
+    "road": "AIR-LEIPZIG",
+    "rail": "AIR-LEIPZIG"
+  },
+  "Li\u00e8ge": {
+    "air": "AIR-LIEGE",
+    "road": "AIR-LIEGE"
+  },
+  "Hamad International": {
+    "air": "AIR-DOHA",
+    "road": "AIR-DOHA"
+  },
+  "Istanbul": {
+    "air": "AIR-ISTANBUL",
+    "road": "AIR-ISTANBUL",
+    "rail": "AIR-ISTANBUL"
+  },
+  "Kempegowda International": {
+    "air": "AIR-BANGALORE",
+    "road": "AIR-BANGALORE"
+  },
+  "Miami International": {
+    "air": "AIR-MIAMI",
+    "road": "AIR-MIAMI"
+  },
+  "Chicago O'Hare International": {
+    "air": "AIR-CHICAGO",
+    "road": "AIR-CHICAGO",
+    "rail": "AIR-CHICAGO"
+  },
+  "Hartsfield-Jackson Atlanta": {
+    "air": "AIR-ATLANTA",
+    "road": "AIR-ATLANTA"
+  },
+  "Chicago Intermodal Complex": {
+    "rail": "RAIL-CHICAGO",
+    "road": "RAIL-CHICAGO"
+  },
+  "Kansas City": {
+    "rail": "RAIL-KANSASCITY",
+    "road": "RAIL-KANSASCITY"
+  },
+  "Duisburg Intermodal Terminal": {
+    "rail": "RAIL-DUISBURG",
+    "road": "RAIL-DUISBURG",
+    "sea": "RAIL-DUISBURG"
+  },
+  "Zhengzhou International Hub": {
+    "rail": "RAIL-ZHENGZHOU",
+    "road": "RAIL-ZHENGZHOU"
+  },
+  "Chengdu International": {
+    "rail": "RAIL-CHENGDU",
+    "road": "RAIL-CHENGDU"
+  },
+  "Warsaw": {
+    "rail": "RAIL-WARSAW",
+    "road": "RAIL-WARSAW"
+  },
+  "Alliance Texas Logistics Hub": {
+    "road": "HUB-DALLAS",
+    "rail": "HUB-DALLAS",
+    "air": "HUB-DALLAS"
+  },
+  "Laredo Border Crossing": {
+    "road": "HUB-LAREDO",
+    "rail": "HUB-LAREDO"
+  },
+  "Seattle-Tacoma": {
+    "sea": "PORT-SEATTLE",
+    "road": "PORT-SEATTLE",
+    "rail": "PORT-SEATTLE"
+  },
+  "Oakland": {
+    "sea": "PORT-OAKLAND",
+    "road": "PORT-OAKLAND",
+    "rail": "PORT-OAKLAND"
+  },
+  "Bandaranaike International": {
+    "air": "AIR-COLOMBO",
+    "road": "AIR-COLOMBO"
+  },
+  "Rajiv Gandhi International": {
+    "air": "AIR-HYDERABAD",
+    "road": "AIR-HYDERABAD"
+  },
+  "Nagpur MIHAN Hub": {
+    "road": "HUB-NAGPUR",
+    "rail": "HUB-NAGPUR",
+    "air": "HUB-NAGPUR"
+  },
+  "Calais Channel Tunnel Hub": {
+    "road": "HUB-CALAIS",
+    "rail": "HUB-CALAIS"
+  },
+  "Buenos": {
+    "sea": "PORT-BUENOSAIRES",
+    "road": "PORT-BUENOSAIRES",
+    "rail": "PORT-BUENOSAIRES"
+  },
+  "Callao": {
+    "sea": "PORT-CALLAO",
+    "road": "PORT-CALLAO"
+  },
+  "Cartagena": {
+    "sea": "PORT-CARTAGENA",
+    "road": "PORT-CARTAGENA"
+  },
+  "Valparaiso": {
+    "sea": "PORT-VALPARAISO",
+    "road": "PORT-VALPARAISO",
+    "rail": "PORT-VALPARAISO"
+  },
+  "Itajai-Navegantes": {
+    "sea": "PORT-ITAJAI",
+    "road": "PORT-ITAJAI"
+  },
+  "Montevideo": {
+    "sea": "PORT-MONTEVIDEO",
+    "road": "PORT-MONTEVIDEO"
+  },
+  "Guayaquil": {
+    "sea": "PORT-GUAYAQUIL",
+    "road": "PORT-GUAYAQUIL"
+  },
+  "Guarulhos International": {
+    "air": "AIR-SAOPAULO",
+    "road": "AIR-SAOPAULO"
+  },
+  "El Dorado International": {
+    "air": "AIR-BOGOTA",
+    "road": "AIR-BOGOTA"
+  },
+  "Arturo Merino Benitez Intl": {
+    "air": "AIR-SANTIAGO",
+    "road": "AIR-SANTIAGO"
+  },
+  "Mexico City International": {
+    "air": "AIR-MEXICO",
+    "road": "AIR-MEXICO"
+  },
+  "Lagos Tin Can/Apapa": {
+    "sea": "PORT-LAGOS",
+    "road": "PORT-LAGOS"
+  },
+  "Abidjan": {
+    "sea": "PORT-ABIDJAN",
+    "road": "PORT-ABIDJAN",
+    "rail": "PORT-ABIDJAN"
+  },
+  "Dar es Salaam": {
+    "sea": "PORT-DARESSALAAM",
+    "road": "PORT-DARESSALAAM",
+    "rail": "PORT-DARESSALAAM"
+  },
+  "Maputo": {
+    "sea": "PORT-MAPUTO",
+    "road": "PORT-MAPUTO",
+    "rail": "PORT-MAPUTO"
+  },
+  "Cape Town": {
+    "sea": "PORT-CAPETOWN",
+    "road": "PORT-CAPETOWN",
+    "rail": "PORT-CAPETOWN"
+  },
+  "Alexandria": {
+    "sea": "PORT-ALEXANDR",
+    "road": "PORT-ALEXANDR",
+    "rail": "PORT-ALEXANDR"
+  },
+  "Lome": {
+    "sea": "PORT-LOME",
+    "road": "PORT-LOME"
+  },
+  "OR Tambo International": {
+    "air": "AIR-JOHANNESBURG",
+    "road": "AIR-JOHANNESBURG"
+  },
+  "Jomo Kenyatta International": {
+    "air": "AIR-NAIROBI",
+    "road": "AIR-NAIROBI"
+  },
+  "Bole International": {
+    "air": "AIR-ADDISABABA",
+    "road": "AIR-ADDISABABA"
+  },
+  "Cairo International": {
+    "air": "AIR-CAIRO",
+    "road": "AIR-CAIRO"
+  },
+  "Khorgos Gateway": {
+    "rail": "RAIL-KHORGOS",
+    "road": "RAIL-KHORGOS"
+  },
+  "Moscow Freight Terminal": {
+    "rail": "RAIL-MOSCOW",
+    "road": "RAIL-MOSCOW"
+  },
+  "Novosibirsk": {
+    "rail": "RAIL-NOVOSIBIRSK",
+    "road": "RAIL-NOVOSIBIRSK"
+  },
+  "Vladivostok": {
+    "sea": "PORT-VLADIVOSTOK",
+    "road": "PORT-VLADIVOSTOK",
+    "rail": "PORT-VLADIVOSTOK"
+  },
+  "St. Petersburg": {
+    "sea": "PORT-STPETERSBURG",
+    "road": "PORT-STPETERSBURG",
+    "rail": "PORT-STPETERSBURG"
+  },
+  "Tashkent Freight Hub": {
+    "rail": "RAIL-TASHKENT",
+    "road": "RAIL-TASHKENT"
+  },
+  "Almaty Logistics Center": {
+    "rail": "RAIL-ALMATY",
+    "road": "RAIL-ALMATY"
+  },
+  "Heydar Aliyev International": {
+    "air": "AIR-BAKU",
+    "road": "AIR-BAKU"
+  },
+  "Constanta": {
+    "sea": "PORT-CONSTANTA",
+    "road": "PORT-CONSTANTA",
+    "rail": "PORT-CONSTANTA"
+  },
+  "Koper": {
+    "sea": "PORT-KOPER",
+    "road": "PORT-KOPER",
+    "rail": "PORT-KOPER"
+  },
+  "Thessaloniki": {
+    "sea": "PORT-THESSALONIKI",
+    "road": "PORT-THESSALONIKI",
+    "rail": "PORT-THESSALONIKI"
+  },
+  "Budapest Intermodal Terminal": {
+    "rail": "RAIL-BUDAPEST",
+    "road": "RAIL-BUDAPEST"
+  },
+  "Prague Logistics Park": {
+    "road": "HUB-PRAGUE",
+    "rail": "HUB-PRAGUE"
+  },
+  "Tanjung Priok": {
+    "sea": "PORT-JAKARTA",
+    "road": "PORT-JAKARTA"
+  },
+  "Tanjung Perak": {
+    "sea": "PORT-SURABAYA",
+    "road": "PORT-SURABAYA"
+  },
+  "Manila": {
+    "sea": "PORT-MANILA",
+    "road": "PORT-MANILA"
+  },
+  "Hai Phong": {
+    "sea": "PORT-HAIPHONG",
+    "road": "PORT-HAIPHONG",
+    "rail": "PORT-HAIPHONG"
+  },
+  "Myanmar International Terminal": {
+    "sea": "PORT-YANGON",
+    "road": "PORT-YANGON"
+  },
+  "Sihanoukville": {
+    "sea": "PORT-SIHANOUKVILLE",
+    "road": "PORT-SIHANOUKVILLE"
+  },
+  "Suvarnabhumi": {
+    "air": "AIR-BANGKOK",
+    "road": "AIR-BANGKOK"
+  },
+  "KL International": {
+    "air": "AIR-KUALALUMPUR",
+    "road": "AIR-KUALALUMPUR"
+  },
+  "Noi Bai International": {
+    "air": "AIR-HANOI",
+    "road": "AIR-HANOI"
+  },
+  "Ninoy Aquino International": {
+    "air": "AIR-MANILA",
+    "road": "AIR-MANILA"
+  },
+  "Melbourne": {
+    "sea": "PORT-MELBOURNE",
+    "road": "PORT-MELBOURNE",
+    "rail": "PORT-MELBOURNE"
+  },
+  "Port Botany Sydney": {
+    "sea": "PORT-SYDNEY",
+    "road": "PORT-SYDNEY",
+    "rail": "PORT-SYDNEY"
+  },
+  "Brisbane": {
+    "sea": "PORT-BRISBANE",
+    "road": "PORT-BRISBANE",
+    "rail": "PORT-BRISBANE"
+  },
+  "Fremantle": {
+    "sea": "PORT-FREMANTLE",
+    "road": "PORT-FREMANTLE",
+    "rail": "PORT-FREMANTLE"
+  },
+  "Tauranga": {
+    "sea": "PORT-TAURANGA",
+    "road": "PORT-TAURANGA",
+    "rail": "PORT-TAURANGA"
+  },
+  "Sydney Kingsford Smith": {
+    "air": "AIR-SYDNEY",
+    "road": "AIR-SYDNEY"
+  },
+  "Melbourne Tullamarine": {
+    "air": "AIR-MELBOURNE",
+    "road": "AIR-MELBOURNE"
+  },
+  "Auckland International": {
+    "air": "AIR-AUCKLAND",
+    "road": "AIR-AUCKLAND"
+  },
+  "Hamad": {
+    "sea": "PORT-HAMAD",
+    "road": "PORT-HAMAD"
+  },
+  "Sohar": {
+    "sea": "PORT-SOHAR",
+    "road": "PORT-SOHAR"
+  },
+  "Bandar Abbas": {
+    "sea": "PORT-BANDARABBAS",
+    "road": "PORT-BANDARABBAS",
+    "rail": "PORT-BANDARABBAS"
+  },
+  "Karachi": {
+    "sea": "PORT-KARACHI",
+    "road": "PORT-KARACHI",
+    "rail": "PORT-KARACHI"
+  },
+  "Chittagong": {
+    "sea": "PORT-CHITTAGONG",
+    "road": "PORT-CHITTAGONG"
+  },
+  "Dalian": {
+    "sea": "PORT-DALIAN",
+    "road": "PORT-DALIAN",
+    "rail": "PORT-DALIAN"
+  },
+  "Xiamen": {
+    "sea": "PORT-XIAMEN",
+    "road": "PORT-XIAMEN",
+    "rail": "PORT-XIAMEN"
+  },
+  "Bremerhaven": {
+    "sea": "PORT-BREMERHAVEN",
+    "road": "PORT-BREMERHAVEN",
+    "rail": "PORT-BREMERHAVEN"
+  },
+  "Barcelona": {
+    "sea": "PORT-BARCELONA",
+    "road": "PORT-BARCELONA",
+    "rail": "PORT-BARCELONA"
+  },
+  "Genoa": {
+    "sea": "PORT-GENOA",
+    "road": "PORT-GENOA",
+    "rail": "PORT-GENOA"
+  },
+  "Algeciras": {
+    "sea": "PORT-ALGECIRAS",
+    "road": "PORT-ALGECIRAS"
+  },
+  "Gioia Tauro": {
+    "sea": "PORT-GIOIA",
+    "road": "PORT-GIOIA",
+    "rail": "PORT-GIOIA"
+  },
+  "Amsterdam": {
+    "air": "AIR-AMSTERDAM",
+    "road": "AIR-AMSTERDAM",
+    "rail": "AIR-AMSTERDAM"
+  },
+  "Venlo Logistics Corridor": {
+    "road": "HUB-VENLO",
+    "rail": "HUB-VENLO"
+  },
+  "Xi'an International": {
+    "rail": "RAIL-XIAN",
+    "road": "RAIL-XIAN"
+  },
+  "Urumqi": {
+    "rail": "RAIL-URUMQI",
+    "road": "RAIL-URUMQI"
+  },
+  "Chennai ICD Complex": {
+    "rail": "RAIL-CHENNAI",
+    "road": "RAIL-CHENNAI"
+  },
+  "Memphis Logistics Hub": {
+    "road": "HUB-MEMPHIS",
+    "rail": "HUB-MEMPHIS",
+    "air": "HUB-MEMPHIS"
+  },
+  "Louisville Logistics Park": {
+    "road": "HUB-LOUISVILLE",
+    "rail": "HUB-LOUISVILLE",
+    "air": "HUB-LOUISVILLE"
+  },
+  "Lazaro Cardenas": {
+    "sea": "PORT-LAZAROCARDENAS",
+    "road": "PORT-LAZAROCARDENAS",
+    "rail": "PORT-LAZAROCARDENAS"
+  },
+  "Paranagua": {
+    "sea": "PORT-PARANAGUA",
+    "road": "PORT-PARANAGUA",
+    "rail": "PORT-PARANAGUA"
+  },
+  "Balboa": {
+    "sea": "PORT-BALBOA",
+    "road": "PORT-BALBOA"
+  },
+  "Jorge Chavez International": {
+    "air": "AIR-LIMA",
+    "road": "AIR-LIMA"
+  },
+  "Tocumen International": {
+    "air": "AIR-PANAMA",
+    "road": "AIR-PANAMA"
+  },
+  "Monterrey Industrial Hub": {
+    "road": "HUB-MONTERREY",
+    "rail": "HUB-MONTERREY"
+  },
+  "Good Hope": {
+    "sea": "CHOKE-CAPEGOOD"
+  },
+  "Lombok Strait": {
+    "sea": "CHOKE-LOMBOK"
+  },
+  "Taiwan Strait": {
+    "sea": "CHOKE-TAIWAN"
+  },
+  "Cape Hatteras Shipping Lane": {
+    "sea": "CHOKE-CAPEHATT"
+  },
+  "Dardanelles Strait": {
+    "sea": "CHOKE-DARDANELLES"
+  },
+  "Memphis Intermodal Yard": {
+    "rail": "RAIL-MEMPHIS",
+    "road": "RAIL-MEMPHIS"
+  },
+  "Houston Intermodal Terminal": {
+    "rail": "RAIL-HOUSTON",
+    "road": "RAIL-HOUSTON"
+  },
+  "Atlanta Norfolk Southern Hub": {
+    "rail": "RAIL-ATLANTA",
+    "road": "RAIL-ATLANTA"
+  },
+  "Seattle BNSF Terminal": {
+    "rail": "RAIL-SEATTLE",
+    "road": "RAIL-SEATTLE"
+  },
+  "Savannah Inland": {
+    "rail": "RAIL-SAVANNAH",
+    "road": "RAIL-SAVANNAH"
+  },
+  "Antwerp": {
+    "rail": "RAIL-ANTWERP",
+    "road": "RAIL-ANTWERP"
+  },
+  "Lyon": {
+    "rail": "RAIL-LYON",
+    "road": "RAIL-LYON"
+  },
+  "Milano Smistamento Terminal": {
+    "rail": "RAIL-MILAN",
+    "road": "RAIL-MILAN"
+  },
+  "Whitefield ICD Bangalore": {
+    "rail": "RAIL-BANGALORE",
+    "road": "RAIL-BANGALORE"
+  },
+  "Ahmedabad ICD Khodiyar": {
+    "rail": "RAIL-AHMEDABAD",
+    "road": "RAIL-AHMEDABAD"
+  },
+  "Ludhiana ICD": {
+    "rail": "RAIL-LUDHIANA",
+    "road": "RAIL-LUDHIANA"
+  },
+  "Chongqing": {
+    "rail": "RAIL-CHONGQING",
+    "road": "RAIL-CHONGQING"
+  },
+  "Yiwu International Trade City": {
+    "rail": "RAIL-YIWU",
+    "road": "RAIL-YIWU"
+  },
+  "Harbin": {
+    "rail": "RAIL-HARBIN",
+    "road": "RAIL-HARBIN"
+  },
+  "Ekaterinburg": {
+    "rail": "RAIL-EKATERINBURG",
+    "road": "RAIL-EKATERINBURG"
+  },
+  "Krasnoyarsk": {
+    "rail": "RAIL-KRASNOYARSK",
+    "road": "RAIL-KRASNOYARSK"
+  },
+  "Halkali": {
+    "rail": "RAIL-ISTANBUL",
+    "road": "RAIL-ISTANBUL"
+  },
+  "Tehran": {
+    "rail": "RAIL-TEHRAN",
+    "road": "RAIL-TEHRAN"
+  },
+  "Lahore Dry": {
+    "rail": "RAIL-LAHORE",
+    "road": "RAIL-LAHORE"
+  },
+  "Nairobi ICD Embakasi": {
+    "rail": "RAIL-NAIROBI",
+    "road": "RAIL-NAIROBI"
+  },
+  "City Deep Container Terminal": {
+    "rail": "RAIL-JOBURG",
+    "road": "RAIL-JOBURG"
+  },
+  "Santos-SP": {
+    "rail": "RAIL-SAOPAULO",
+    "road": "RAIL-SAOPAULO"
+  },
+  "JNPT-Dadri ICD Complex": {
+    "rail": "ICD-JNPT",
+    "road": "ICD-JNPT"
+  },
+  "Khorgos ICBC Dry": {
+    "rail": "ICD-KHORGOS",
+    "road": "ICD-KHORGOS"
+  },
+  "Istanbul Halkali Customs Hub": {
+    "rail": "ICD-ISTANBUL",
+    "road": "ICD-ISTANBUL"
+  },
+  "Riyadh Dry": {
+    "rail": "ICD-RIYADH",
+    "road": "ICD-RIYADH"
+  },
+  "Melbourne Intermodal Terminal": {
+    "rail": "ICD-MELBOURNE",
+    "road": "ICD-MELBOURNE"
+  },
+  "Buffalo-Niagara Border Hub": {
+    "road": "BORDER-BUFFALONIAGARA",
+    "rail": "BORDER-BUFFALONIAGARA"
+  },
+  "El Paso-Ciudad Juarez Gateway": {
+    "road": "BORDER-ELPASOCD",
+    "rail": "BORDER-ELPASOCD"
+  },
+  "Detroit-Windsor Tunnel Hub": {
+    "road": "BORDER-DETROIT",
+    "rail": "BORDER-DETROIT"
+  },
+  "Dover Freight": {
+    "road": "BORDER-DOVER",
+    "sea": "BORDER-DOVER"
+  },
+  "Brenner Pass Corridor": {
+    "road": "BORDER-BRENNER",
+    "rail": "BORDER-BRENNER"
+  },
+  "Betuwe Route Corridor": {
+    "rail": "BORDER-BETUWE",
+    "road": "BORDER-BETUWE"
+  },
+  "Indianapolis Crossroads Hub": {
+    "road": "HUB-INDIANAPOLIS",
+    "rail": "HUB-INDIANAPOLIS",
+    "air": "HUB-INDIANAPOLIS"
+  },
+  "Columbus Rickenbacker Hub": {
+    "road": "HUB-COLUMBUS",
+    "rail": "HUB-COLUMBUS",
+    "air": "HUB-COLUMBUS"
+  },
+  "PLAZA Zaragoza": {
+    "road": "HUB-ZARAGOZA",
+    "rail": "HUB-ZARAGOZA",
+    "air": "HUB-ZARAGOZA"
+  },
+  "Chennai Logistics Park": {
+    "road": "HUB-CHENNAI",
+    "rail": "HUB-CHENNAI"
+  },
+  "Haifa": {
+    "sea": "PORT-HAIFA",
+    "road": "PORT-HAIFA",
+    "rail": "PORT-HAIFA"
+  },
+  "Trieste": {
+    "sea": "PORT-TRIESTE",
+    "road": "PORT-TRIESTE",
+    "rail": "PORT-TRIESTE"
+  },
+  "Port Said East": {
+    "sea": "PORT-PORTSAID",
+    "road": "PORT-PORTSAID"
+  },
+  "Novorossiysk": {
+    "sea": "PORT-NOVOROSSIYSK",
+    "road": "PORT-NOVOROSSIYSK",
+    "rail": "PORT-NOVOROSSIYSK"
+  },
+  "Baiyun International": {
+    "air": "AIR-GUANGZHOU",
+    "road": "AIR-GUANGZHOU"
+  },
+  "Dallas/Fort Worth International": {
+    "air": "AIR-DALLAS",
+    "road": "AIR-DALLAS"
+  },
+  "King Khalid International": {
+    "air": "AIR-RIYADH",
+    "road": "AIR-RIYADH"
+  },
+  "Chengdu Tianfu International": {
+    "air": "AIR-CHENGDU",
+    "road": "AIR-CHENGDU"
+  },
+  "Zhengzhou Xinzheng": {
+    "air": "AIR-ZHENGZHOU",
+    "road": "AIR-ZHENGZHOU"
+  },
+  "Walvis Bay": {
+    "sea": "PORT-WALVISBAY",
+    "road": "PORT-WALVISBAY",
+    "rail": "PORT-WALVISBAY"
+  },
+  "Luanda": {
+    "sea": "PORT-LUANDA",
+    "road": "PORT-LUANDA"
+  },
+  "Richards Bay": {
+    "sea": "PORT-RICHARDSBAY",
+    "road": "PORT-RICHARDSBAY",
+    "rail": "PORT-RICHARDSBAY"
+  },
+  "Toamasina": {
+    "sea": "PORT-TOAMASINA",
+    "road": "PORT-TOAMASINA"
+  },
+  "Berbera": {
+    "sea": "PORT-BERBERA",
+    "road": "PORT-BERBERA"
+  },
+  "Aden": {
+    "sea": "PORT-ADEN",
+    "road": "PORT-ADEN"
+  },
+  "Port Sudan": {
+    "sea": "PORT-PORTSUDAN",
+    "road": "PORT-PORTSUDAN",
+    "rail": "PORT-PORTSUDAN"
+  },
+  "Fujairah": {
+    "sea": "PORT-FUJAIRAH",
+    "road": "PORT-FUJAIRAH"
+  },
+  "Duqm": {
+    "sea": "PORT-DUQM",
+    "road": "PORT-DUQM"
+  },
+  "Gwadar": {
+    "sea": "PORT-GWADAR",
+    "road": "PORT-GWADAR"
+  },
+  "Murmansk": {
+    "sea": "PORT-MURMANSK",
+    "road": "PORT-MURMANSK",
+    "rail": "PORT-MURMANSK"
+  },
+  "Arkhangelsk": {
+    "sea": "PORT-ARKHANGELSK",
+    "road": "PORT-ARKHANGELSK",
+    "rail": "PORT-ARKHANGELSK"
+  },
+  "Northern Sea Route": {
+    "sea": "CHOKE-NSR"
+  },
+  "Samarkand": {
+    "rail": "RAIL-SAMARKAND",
+    "road": "RAIL-SAMARKAND"
+  },
+  "Tbilisi": {
+    "rail": "RAIL-TBILISI",
+    "road": "RAIL-TBILISI"
+  },
+  "Aktau": {
+    "rail": "RAIL-AKTAU",
+    "road": "RAIL-AKTAU",
+    "sea": "RAIL-AKTAU"
+  },
+  "Baku": {
+    "sea": "PORT-BAKU",
+    "road": "PORT-BAKU",
+    "rail": "PORT-BAKU"
+  },
+  "Kars": {
+    "rail": "RAIL-KARS",
+    "road": "RAIL-KARS"
+  },
+  "Kampala Freight Terminal": {
+    "rail": "RAIL-KAMPALA",
+    "road": "RAIL-KAMPALA"
+  },
+  "Kigali Logistics Hub": {
+    "road": "RAIL-KIGALI",
+    "rail": "RAIL-KIGALI"
+  },
+  "Dar es Salaam Logistics Zone": {
+    "road": "HUB-DARES",
+    "rail": "HUB-DARES"
+  },
+  "Nogales Border Crossing": {
+    "road": "BORDER-NOGALES"
+  },
+  "Brownsville-Matamoros Gateway": {
+    "road": "BORDER-BROWNSVILLE",
+    "rail": "BORDER-BROWNSVILLE"
+  },
+  "Brownsville": {
+    "sea": "PORT-BROWNSVILLE",
+    "road": "PORT-BROWNSVILLE",
+    "rail": "PORT-BROWNSVILLE"
+  },
+  "Mendoza Trans-Andean": {
+    "rail": "RAIL-MENDOZA",
+    "road": "RAIL-MENDOZA"
+  },
+  "Arica": {
+    "sea": "PORT-ARICA",
+    "road": "PORT-ARICA",
+    "rail": "PORT-ARICA"
+  },
+  "Iquique": {
+    "sea": "PORT-IQUIQUE",
+    "road": "PORT-IQUIQUE"
+  },
+  "Antonina": {
+    "sea": "PORT-PARANAGUA2",
+    "road": "PORT-PARANAGUA2"
+  },
+  "Frankfurt-Hahn": {
+    "air": "AIR-HAHN",
+    "road": "AIR-HAHN"
+  },
+  "Sharjah Cargo Village": {
+    "air": "AIR-SHARJAH2",
+    "road": "AIR-SHARJAH2"
+  },
+  "Rickenbacker Cargo": {
+    "air": "AIR-RICKENBACKER",
+    "road": "AIR-RICKENBACKER"
+  },
+  "Liege Bierset Cargo": {
+    "air": "AIR-LIEGE2",
+    "road": "AIR-LIEGE2"
+  },
+  "Almaty International": {
+    "air": "AIR-ALMATY",
+    "road": "AIR-ALMATY"
+  },
+  "Brest": {
+    "rail": "RAIL-BREST",
+    "road": "RAIL-BREST"
+  },
+  "Iletsk": {
+    "rail": "RAIL-ILETSK",
+    "road": "RAIL-ILETSK"
+  },
+  "Dostyk Border Terminal": {
+    "rail": "RAIL-DOSTYK",
+    "road": "RAIL-DOSTYK"
+  },
+  "Manzhouli Border Station": {
+    "rail": "RAIL-MANZHOULI",
+    "road": "RAIL-MANZHOULI"
+  },
+  "Suzhou West": {
+    "rail": "RAIL-SUZHOU",
+    "road": "RAIL-SUZHOU"
+  },
+  "East": {
+    "road": "PORT-PORTSAID2",
+    "sea": "PORT-PORTSAID2"
+  },
+  "Jebel Ali Free Zone": {
+    "road": "HUB-JEBEL",
+    "sea": "HUB-JEBEL"
+  },
+  "Hambantota": {
+    "sea": "PORT-HAMBANTOTA",
+    "road": "PORT-HAMBANTOTA"
+  },
+  "Trincomalee": {
+    "sea": "PORT-TRINCOMALEE",
+    "road": "PORT-TRINCOMALEE"
+  },
+  "King Abdulaziz": {
+    "road": "HUB-DAMMAM",
+    "rail": "HUB-DAMMAM",
+    "sea": "HUB-DAMMAM"
+  },
+  "Tanjung Sauh Anchorage": {
+    "sea": "PORT-TANJUNGSAUH",
+    "road": "PORT-TANJUNGSAUH"
+  },
+  "Cai Mep International Terminal": {
+    "sea": "PORT-CAIMEP",
+    "road": "PORT-CAIMEP"
+  },
+  "Lille Logistics Hub": {
+    "road": "HUB-LILLE",
+    "rail": "HUB-LILLE"
+  },
+  "Bologna Interporto": {
+    "road": "HUB-BOLOGNA",
+    "rail": "HUB-BOLOGNA"
+  },
+  "Verona Quadrante Europa": {
+    "rail": "RAIL-VERONA",
+    "road": "RAIL-VERONA"
+  },
+  "Malaszewicze": {
+    "rail": "RAIL-MALASZEWICZE",
+    "road": "RAIL-MALASZEWICZE"
+  },
+  "Duisburg Logport": {
+    "road": "HUB-DUISBURG",
+    "rail": "HUB-DUISBURG",
+    "sea": "HUB-DUISBURG"
+  },
+  "Ravenna": {
+    "sea": "PORT-RAVENNA",
+    "road": "PORT-RAVENNA",
+    "rail": "PORT-RAVENNA"
+  },
+  "Oslo Gardermoen Cargo": {
+    "air": "AIR-OSLO",
+    "road": "AIR-OSLO"
+  },
+  "Narvik": {
+    "sea": "PORT-NARVIK",
+    "road": "PORT-NARVIK",
+    "rail": "PORT-NARVIK"
+  },
+  "Stockholm Logistics Hub": {
+    "road": "HUB-STOCKHOLM",
+    "rail": "HUB-STOCKHOLM",
+    "air": "HUB-STOCKHOLM"
+  },
+  "Helsinki Vuosaari": {
+    "sea": "PORT-HELSINKI",
+    "road": "PORT-HELSINKI",
+    "rail": "PORT-HELSINKI"
+  },
+  "Helsinki": {
+    "rail": "RAIL-HELSINKI",
+    "road": "RAIL-HELSINKI"
+  },
+  "Reykjavik": {
+    "sea": "PORT-REYKJAVIK",
+    "road": "PORT-REYKJAVIK"
+  },
+  "PANC Cargo Hub": {
+    "air": "AIR-ANCHORAGE2",
+    "road": "AIR-ANCHORAGE2"
+  },
+  "Prince Rupert": {
+    "sea": "PORT-PRINCE_RUPERT",
+    "road": "PORT-PRINCE_RUPERT",
+    "rail": "PORT-PRINCE_RUPERT"
+  },
+  "Halifax": {
+    "sea": "PORT-HALIFAX",
+    "road": "PORT-HALIFAX",
+    "rail": "PORT-HALIFAX"
+  },
+  "Winnipeg CentrePort Canada": {
+    "rail": "RAIL-WINNIPEG",
+    "road": "RAIL-WINNIPEG",
+    "air": "RAIL-WINNIPEG"
+  },
+  "Elk Grove Village Logistics": {
+    "road": "HUB-CHICAGO",
+    "rail": "HUB-CHICAGO",
+    "air": "HUB-CHICAGO"
+  },
+  "Klaipeda": {
+    "sea": "PORT-KLAIPEDA",
+    "road": "PORT-KLAIPEDA",
+    "rail": "PORT-KLAIPEDA"
+  },
+  "Hyderabad": {
+    "rail": "RAIL-HYDERABAD",
+    "road": "DC-HYDERABAD"
+  },
+  "Hazira": {
+    "road": "PORT-HAZIRA",
+    "sea": "PORT-HAZIRA"
+  },
+  "Pipavav": {
+    "road": "PORT-PIPAVAV",
+    "sea": "PORT-PIPAVAV"
+  },
+  "Dahej": {
+    "road": "PORT-DAHEJ",
+    "sea": "PORT-DAHEJ"
+  },
+  "Jamnagar": {
+    "road": "DC-JAMNAGAR",
+    "sea": "PORT-SIKKA",
+    "air": "AIR-JAMNAGAR"
+  },
+  "Okha": {
+    "road": "PORT-OKHA",
+    "sea": "PORT-OKHA"
+  },
+  "Surat": {
+    "road": "AIR-SURAT",
+    "sea": "PORT-MAGDALLA",
+    "air": "AIR-SURAT",
+    "rail": "RAIL-SURAT"
+  },
+  "Veraval": {
+    "road": "PORT-VERAVAL",
+    "sea": "PORT-VERAVAL"
+  },
+  "Bhavnagar": {
+    "road": "PORT-NAVBHAVNAGAR",
+    "sea": "PORT-NAVBHAVNAGAR",
+    "air": "AIR-BHAVNAGAR"
+  },
+  "Mithapur": {
+    "road": "PORT-MITHAPUR",
+    "sea": "PORT-MITHAPUR"
+  },
+  "Ahmedabad": {
+    "air": "AIR-AHMEDABAD",
+    "road": "AIR-AHMEDABAD"
+  },
+  "Vadodara": {
+    "air": "AIR-VADODARA",
+    "road": "RAIL-VADODARA",
+    "rail": "RAIL-VADODARA"
+  },
+  "Rajkot": {
+    "air": "AIR-RAJKOT",
+    "road": "AIR-RAJKOT",
+    "rail": "RAIL-RAJKOT"
+  },
+  "Bhuj": {
+    "air": "AIR-BHUJ",
+    "road": "AIR-BHUJ"
+  },
+  "Gandhidham": {
+    "road": "RAIL-GANDHIDHAM",
+    "rail": "RAIL-GANDHIDHAM"
+  },
+  "Bharuch": {
+    "road": "DC-BHARUCH",
+    "rail": "RAIL-BHARUCH"
+  },
+  "Sanand": {
+    "road": "DC-SANAND"
+  },
+  "Vapi": {
+    "road": "DC-VAPI"
+  },
+  "Morbi": {
+    "road": "DC-MORBI"
+  },
+  "Ankleshwar": {
+    "road": "DC-ANKLESHWAR"
+  },
+  "Kadi": {
+    "road": "DC-KADI"
+  },
+  "Halol": {
+    "road": "DC-HALOL"
+  },
+  "Pune": {
+    "air": "AIR-PUNE",
+    "road": "AIR-PUNE",
+    "rail": "RAIL-PUNE"
+  },
+  "Nagpur": {
+    "air": "AIR-NAGPUR",
+    "road": "AIR-NAGPUR",
+    "rail": "RAIL-NAGPUR"
+  },
+  "Aurangabad": {
+    "air": "AIR-AURANGABAD",
+    "road": "DC-AURANGABAD"
+  },
+  "Nashik": {
+    "air": "AIR-NASHIK",
+    "road": "RAIL-NASHIK",
+    "rail": "RAIL-NASHIK"
+  },
+  "Ratnagiri": {
+    "road": "PORT-RATNAGIRI",
+    "sea": "PORT-RATNAGIRI"
+  },
+  "Dharamtar": {
+    "road": "PORT-DHARAMTAR",
+    "sea": "PORT-DHARAMTAR"
+  },
+  "Jaigad": {
+    "road": "PORT-JAIGAD",
+    "sea": "PORT-JAIGAD"
+  },
+  "Bhusawal": {
+    "road": "RAIL-BHUSAWAL",
+    "rail": "RAIL-BHUSAWAL"
+  },
+  "Solapur": {
+    "road": "RAIL-SOLAPUR",
+    "rail": "RAIL-SOLAPUR"
+  },
+  "Kalyan": {
+    "road": "RAIL-KALYAN",
+    "rail": "RAIL-KALYAN"
+  },
+  "Chakan": {
+    "road": "DC-CHAKAN"
+  },
+  "Bhiwandi": {
+    "road": "DC-BHIWANDI"
+  },
+  "Navi Mumbai": {
+    "road": "DC-TALOJA"
+  },
+  "Tuticorin": {
+    "road": "PORT-TUTICORIN",
+    "sea": "PORT-TUTICORIN"
+  },
+  "Mangalore": {
+    "road": "PORT-NEWMANGALORE",
+    "sea": "PORT-NEWMANGALORE",
+    "air": "AIR-MANGALORE"
+  },
+  "Karwar": {
+    "road": "PORT-KARWAR",
+    "sea": "PORT-KARWAR"
+  },
+  "Vizag": {
+    "road": "PORT-VISAKHAPATNAM",
+    "sea": "PORT-VISAKHAPATNAM",
+    "air": "AIR-VIZAG"
+  },
+  "Nellore": {
+    "road": "PORT-KRISHNAPATNAM",
+    "sea": "PORT-KRISHNAPATNAM"
+  },
+  "Bengaluru": {
+    "air": "AIR-BENGALURU",
+    "road": "AIR-BENGALURU",
+    "rail": "RAIL-BENGALURU"
+  },
+  "Coimbatore": {
+    "air": "AIR-COIMBATORE",
+    "road": "AIR-COIMBATORE"
+  },
+  "Madurai": {
+    "air": "AIR-MADURAI",
+    "road": "AIR-MADURAI"
+  },
+  "Trichy": {
+    "air": "AIR-TRICHY",
+    "road": "AIR-TRICHY"
+  },
+  "Vijayawada": {
+    "air": "AIR-VIJAYAWADA",
+    "road": "RAIL-VIJAYAWADA",
+    "rail": "RAIL-VIJAYAWADA"
+  },
+  "Salem": {
+    "road": "RAIL-SALEM",
+    "rail": "RAIL-SALEM"
+  },
+  "Hubballi": {
+    "road": "RAIL-HUBBALLI",
+    "rail": "RAIL-HUBBALLI"
+  },
+  "Arakkonam": {
+    "road": "RAIL-ARAKKONAM",
+    "rail": "RAIL-ARAKKONAM"
+  },
+  "Hosur": {
+    "road": "DC-HOSUR"
+  },
+  "Belagavi": {
+    "road": "DC-BELAGAVI"
+  },
+  "Lucknow": {
+    "air": "AIR-LUCKNOW",
+    "road": "AIR-LUCKNOW",
+    "rail": "RAIL-LUCKNOW"
+  },
+  "Jaipur": {
+    "air": "AIR-JAIPUR",
+    "road": "AIR-JAIPUR"
+  },
+  "Chandigarh": {
+    "air": "AIR-CHANDIGARH",
+    "road": "AIR-CHANDIGARH"
+  },
+  "Amritsar": {
+    "air": "AIR-AMRITSAR",
+    "road": "AIR-AMRITSAR"
+  },
+  "Varanasi": {
+    "air": "AIR-VARANASI",
+    "road": "AIR-VARANASI"
+  },
+  "Kanpur": {
+    "road": "RAIL-KANPUR",
+    "rail": "RAIL-KANPUR"
+  },
+  "Mughalsarai": {
+    "road": "RAIL-MUGHALSARAI",
+    "rail": "RAIL-MUGHALSARAI"
+  },
+  "Agra": {
+    "road": "RAIL-AGRA",
+    "rail": "RAIL-AGRA"
+  },
+  "Kota": {
+    "road": "RAIL-KOTA",
+    "rail": "RAIL-KOTA"
+  },
+  "Dadri": {
+    "road": "RAIL-DADRI",
+    "rail": "RAIL-DADRI"
+  },
+  "Rewari": {
+    "road": "RAIL-REWARI",
+    "rail": "RAIL-REWARI"
+  },
+  "Noida": {
+    "road": "DC-NOIDA"
+  },
+  "Gurgaon": {
+    "road": "DC-GURGAON"
+  },
+  "Manesar": {
+    "road": "DC-MANESAR"
+  },
+  "Bawal": {
+    "road": "DC-BAWAL"
+  },
+  "Pantnagar": {
+    "road": "DC-PANTNAGAR"
+  },
+  "Bhiwadi": {
+    "road": "DC-TAPUKARA"
+  },
+  "Neemrana": {
+    "road": "DC-NEEMRANA"
+  },
+  "Sonipat": {
+    "road": "DC-KUNDLI"
+  },
+  "Paradip": {
+    "road": "PORT-PARADIP",
+    "sea": "PORT-PARADIP"
+  },
+  "Dhamra": {
+    "road": "PORT-DHAMRA",
+    "sea": "PORT-DHAMRA"
+  },
+  "Haldia": {
+    "road": "PORT-HALDIA",
+    "sea": "PORT-HALDIA"
+  },
+  "Guwahati": {
+    "air": "AIR-GUWAHATI",
+    "road": "AIR-GUWAHATI"
+  },
+  "Indore": {
+    "air": "AIR-INDORE",
+    "road": "AIR-INDORE"
+  },
+  "Bhubaneswar": {
+    "air": "AIR-BHUBANESWAR",
+    "road": "AIR-BHUBANESWAR"
+  },
+  "Itarsi": {
+    "road": "RAIL-ITARSI",
+    "rail": "RAIL-ITARSI"
+  },
+  "Bilaspur": {
+    "road": "RAIL-BILASPUR",
+    "rail": "RAIL-BILASPUR"
+  },
+  "Raipur": {
+    "road": "RAIL-RAIPUR",
+    "rail": "RAIL-RAIPUR"
+  },
+  "Kharagpur": {
+    "road": "RAIL-KHARAGPUR",
+    "rail": "RAIL-KHARAGPUR"
+  },
+  "Jharsuguda": {
+    "road": "RAIL-JHARSUGUDA",
+    "rail": "RAIL-JHARSUGUDA"
+  },
+  "Adra": {
+    "road": "RAIL-ADRA",
+    "rail": "RAIL-ADRA"
+  },
+  "Jamshedpur": {
+    "road": "DC-JAMSHEDPUR"
+  }
+}

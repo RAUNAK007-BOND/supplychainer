@@ -1,0 +1,12 @@
+# Slim runtime for the free Render plan: no PyTorch / sentence-transformers (peak RSS ~220 MB).
+fastapi==0.136.1
+uvicorn[standard]==0.46.0
+pydantic==2.13.3
+numpy==2.4.4
+pandas==3.0.2
+scikit-learn==1.8.0
+joblib==1.5.3
+networkx==3.6.1
+feedparser==6.0.12
+httpx==0.28.1
+reportlab==5.0.1
