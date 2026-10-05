@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Supplychainer · Promo video</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<style>
+/* ===== Supplychainer dark tokens (from frontend/src/index.css) ===== */
+:root{
+  --bg:#0e1118;--surface:#161a23;--surface-2:#1d222d;--surface-3:#262c39;--line:#262c38;--line-2:#343c4b;
+  --text:#eef0f5;--text-2:#aeb5c3;--muted:#7b8496;
+  --accent:#6f8bff;--accent-hover:#88a0ff;--accent-soft:rgba(111,139,255,.14);--accent-line:rgba(111,139,255,.4);--accent-ink:#0b1030;
+  --sea:#38b2f0;--air:#a78bfa;--rail:#f5b03c;--road:#2cc4b1;--transfer:#8e98ab;
+  --ok:#2fc497;--ok-soft:rgba(47,196,151,.13);--ok-text:#6fe0bd;
+  --warn:#f5b33c;--warn-soft:rgba(245,179,60,.13);--warn-text:#fcd38a;
+  --high:#ff8a4c;--high-soft:rgba(255,138,76,.13);--high-text:#ffb38a;
+  --crit:#ff6369;--crit-soft:rgba(255,99,105,.13);--crit-text:#ff9a9e;
+  --info-soft:rgba(56,178,240,.12);--info-text:#8fd3fb;
+  --radius:16px;--radius-sm:11px;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.3);--shadow:0 1px 2px rgba(0,0,0,.3),0 12px 32px -14px rgba(0,0,0,.6);--shadow-lg:0 20px 50px -18px rgba(0,0,0,.7);
+  --map-bg:#1a1d24;
+  --font:'Plus Jakarta Sans','Segoe UI',system-ui,-apple-system,sans-serif;
+  color-scheme:dark;box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+/* The film is dark in every viewer theme */
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0e1118}}
+:root[data-theme="dark"]{--bg:#0e1118}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#05070c;color:var(--text);overflow:hidden;font-family:var(--font);-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit}
+
+/* ===== film frame ===== */
+#vp{position:fixed;inset:0;background:#000}
+#stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform-origin:50% 50%;overflow:hidden;cursor:pointer;
+  background:radial-gradient(1200px 800px at 15% 5%,#141d42 0%,transparent 60%),radial-gradient(1100px 760px at 95% 100%,#1b1540 0%,transparent 62%),#07090f}
+.orb{position:absolute;border-radius:50%;filter:blur(140px);pointer-events:none}
+.o1{width:780px;height:780px;left:-220px;top:-280px;background:#3355ff;opacity:.5}
+.o2{width:700px;height:700px;right:-180px;bottom:-260px;background:#7c4dff;opacity:.45}
+.o3{width:540px;height:540px;left:820px;top:640px;background:#1597d8;opacity:.25}
+.grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(140,160,255,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(140,160,255,.055) 1px,transparent 1px);background-size:80px 80px;-webkit-mask-image:radial-gradient(ellipse at center,#000 10%,transparent 70%);mask-image:radial-gradient(ellipse at center,#000 10%,transparent 70%)}
+.grain{position:absolute;inset:0;pointer-events:none;opacity:.06;mix-blend-mode:overlay;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+.vignette{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 58%,rgba(0,0,0,.55) 100%);z-index:40}
+.scrim{position:absolute;left:0;right:0;bottom:0;height:300px;pointer-events:none;background:linear-gradient(transparent,rgba(5,7,12,.85));z-index:30;opacity:0}
+
+#globeWrap{position:absolute;left:560px;top:140px;width:800px;height:800px;z-index:2}
+#globe{width:100%;height:100%;overflow:visible}
+#grat{fill:none;stroke:rgba(150,170,255,.16);stroke-width:1}
+#arcs path{fill:none;stroke:url(#arcG);stroke-width:2.4;stroke-linecap:round}
+#gnodes circle{fill:#cfdcff}
+
+.mark{width:84px;height:84px;border-radius:26px;display:grid;place-items:center;background:var(--accent);color:var(--accent-ink);box-shadow:0 20px 60px rgba(111,139,255,.45)}
+.mark svg{width:44px;height:44px}
+#title{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:5;pointer-events:none}
+#word{margin-top:28px;font:800 168px/1 var(--font);letter-spacing:-.045em;white-space:nowrap}
+#word span,.gtext{display:inline-block;background:linear-gradient(180deg,#fff 25%,#aab8ff 100%);-webkit-background-clip:text;background-clip:text;color:transparent;padding-bottom:.08em}
+#tag{margin-top:24px;font:600 38px/1.2 var(--font);color:#c3cbe6;letter-spacing:-.01em}
+#stat{position:absolute;left:170px;top:300px;width:780px;z-index:5}
+#num{font:800 200px/.9 var(--font);letter-spacing:-.06em;background:linear-gradient(120deg,var(--sea),var(--accent) 55%,var(--air));-webkit-background-clip:text;background-clip:text;color:transparent}
+#stat p{margin-top:26px;font:700 46px/1.2 var(--font);letter-spacing:-.025em}
+#stat p span{display:block;color:var(--text-2);font:500 30px/1.4 var(--font);letter-spacing:0;margin-top:14px}
+
+#cam{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;z-index:10}
+.cap{position:absolute;left:110px;bottom:80px;font:800 58px/1.1 var(--font);letter-spacing:-.035em;z-index:35;color:#fff;text-shadow:0 4px 30px rgba(0,0,0,.6)}
+#outro{position:absolute;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;pointer-events:none}
+#outro h3{margin-top:22px;font:800 150px/1 var(--font);letter-spacing:-.045em}
+#outro .ol{margin-top:18px;font:500 30px/1.4 var(--font);color:#c3cbe6;max-width:1000px}
+#outro .url{margin-top:40px;padding:18px 34px;border-radius:40px;font:700 30px var(--font);letter-spacing:-.01em;border:1.5px solid transparent;
+  background:linear-gradient(#0d1330,#0d1330) padding-box,linear-gradient(120deg,var(--sea),var(--accent),var(--air)) border-box;box-shadow:0 0 80px rgba(111,139,255,.35)}
+#cursor{position:absolute;left:0;top:0;width:40px;height:40px;z-index:50;pointer-events:none;filter:drop-shadow(0 6px 14px rgba(0,0,0,.6));transform-origin:4px 3px;opacity:0}
+#ripple{position:absolute;left:0;top:0;width:90px;height:90px;margin:-45px 0 0 -45px;border-radius:50%;border:2px solid var(--accent);box-shadow:0 0 30px rgba(111,139,255,.7);z-index:49;pointer-events:none;opacity:0}
+
+/* ===== browser window ===== */
+#win{position:absolute;left:240px;top:115px;width:1440px;height:850px;border-radius:16px;overflow:hidden;background:var(--bg);
+  box-shadow:0 0 0 1px rgba(160,180,255,.14),0 60px 160px rgba(0,0,0,.7),0 0 140px rgba(111,139,255,.18)}
+.chrome{height:40px;background:#0a0d13;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 16px;gap:8px}
+.chrome i{width:12px;height:12px;border-radius:50%;background:#2a303c}
+.chrome .url{margin:0 auto;display:flex;align-items:center;gap:8px;height:26px;padding:0 16px;border-radius:8px;background:var(--surface);color:var(--text-2);font-size:12.5px;font-weight:600;transform:translateX(-24px)}
+.chrome .url svg{width:12px;height:12px}
+
+/* ===== App (real component styles, dark theme) ===== */
+.app{display:grid;grid-template-rows:62px 1fr;height:810px;font-size:14px;line-height:1.5;color:var(--text);background:var(--bg)}
+.topbar{display:flex;align-items:center;gap:20px;padding:0 20px;background:var(--surface);border-bottom:1px solid var(--line);position:relative;z-index:1000}
+.brand{display:flex;align-items:center;gap:11px;font-weight:800;letter-spacing:-.02em;font-size:17px;white-space:nowrap}
+.brand-mark{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;background:var(--accent);color:var(--accent-ink)}
+.brand small{display:block;font-size:11.5px;color:var(--muted);font-weight:500;letter-spacing:0}
+.nav{display:flex;gap:2px;margin-left:6px;padding:4px;background:var(--surface-2);border-radius:13px}
+.nav button{background:none;border:0;padding:8px 14px;border-radius:10px;color:var(--text-2);font-weight:600;font-size:13.5px;display:flex;align-items:center;gap:7px;white-space:nowrap;position:relative}
+.nav button.active{background:var(--surface);color:var(--text);box-shadow:var(--shadow-sm)}
+.nav button.active svg{color:var(--accent)}
+.nav .count{min-width:19px;height:19px;border-radius:10px;background:var(--crit);color:#fff;font-size:11px;display:grid;place-items:center;padding:0 5px;font-weight:700}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.pill{display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border-radius:999px;font-size:12.5px;font-weight:600;border:1px solid var(--line);color:var(--text-2);white-space:nowrap;background:var(--surface)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--muted);flex:none}
+.dot.ok{background:var(--ok);box-shadow:0 0 0 3px var(--ok-soft)}
+.dot.crit{background:var(--crit);box-shadow:0 0 0 3px var(--crit-soft);animation:pulse 1.2s infinite}
+.pill.live{border-color:transparent;color:var(--crit-text);background:var(--crit-soft)}
+@keyframes pulse{50%{opacity:.45}}
+.theme-btn{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;border:1px solid var(--line);background:var(--surface);color:var(--text-2)}
+.view{min-height:0;position:relative}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.section-title{font-size:13.5px;color:var(--text);font-weight:700;margin:20px 0 10px;display:flex;align-items:center;gap:8px}
+.section-title svg{color:var(--accent)}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;position:relative}
+.field>label,.label{font-size:12.5px;font-weight:600;color:var(--text-2)}
+.input,.select{width:100%;background:var(--surface);border:1px solid var(--line-2);border-radius:var(--radius-sm);padding:11px 13px;font-size:14px;color:var(--text);min-height:44px;display:flex;align-items:center;white-space:nowrap;overflow:hidden}
+.input.focus,.select.focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+.select{padding-right:34px;position:relative}
+.select::after{content:"";position:absolute;right:15px;top:50%;width:6px;height:6px;border-right:1.6px solid var(--muted);border-bottom:1.6px solid var(--muted);transform:translateY(-70%) rotate(45deg)}
+.select.crit{border-color:var(--crit)}
+.ph{color:var(--muted)}
+.caret{display:inline-block;width:1.5px;height:17px;background:var(--text);margin-left:1px;animation:blink 1s steps(1) infinite;opacity:0}
+@keyframes blink{50%{visibility:hidden}}
+.seg{display:flex;background:var(--surface-2);border-radius:var(--radius-sm);padding:4px;gap:2px}
+.seg button{flex:1;border:0;background:none;padding:8px 6px;border-radius:8px;font-size:13px;font-weight:600;color:var(--text-2);display:flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap}
+.seg button.on{background:var(--surface);color:var(--text);box-shadow:var(--shadow-sm)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:var(--radius-sm);border:1px solid var(--line-2);background:var(--surface);padding:9px 14px;font-weight:600;font-size:13.5px;color:var(--text);white-space:nowrap}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:transparent;font-weight:700;box-shadow:0 6px 18px -8px var(--accent)}
+.btn.sm{padding:7px 11px;font-size:12.5px;border-radius:9px}
+.btn.block{width:100%}
+.btn.on{border-color:var(--accent-line);color:var(--accent);background:var(--accent-soft)}
+.icon-btn{width:34px;height:34px;display:grid;place-items:center;border-radius:10px;border:1px solid var(--line-2);background:var(--surface);color:var(--text-2);box-shadow:var(--shadow-sm)}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:600;border:1px solid transparent;color:var(--text-2);background:var(--surface-2);white-space:nowrap}
+.chip.click{border-color:var(--line);background:var(--surface)}
+.chip.warn{color:var(--warn-text);background:var(--warn-soft)} .chip.ok{color:var(--ok-text);background:var(--ok-soft)}
+.badge{font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px}
+.badge.FASTEST{background:var(--warn-soft);color:var(--warn-text)}
+.badge.BALANCED{background:var(--accent-soft);color:var(--accent)}
+.badge.SAFEST{background:var(--ok-soft);color:var(--ok-text)}
+.text-crit{color:var(--crit-text)} .text-ok{color:var(--ok-text)} .text-warn{color:var(--warn-text)}
+.dim{color:var(--text-2)} .muted{color:var(--muted)}
+.spinner{width:16px;height:16px;border-radius:50%;border:2px solid rgba(11,16,48,.3);border-top-color:var(--accent-ink);animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.planner{display:grid;grid-template-columns:370px 1fr 0px;height:100%;min-height:0}
+.side{overflow:hidden;min-height:0;padding:16px;display:flex;flex-direction:column;gap:14px;z-index:500;background:var(--bg)}
+.side.left{border-right:1px solid var(--line)}
+.side.right{border-left:1px solid var(--line);padding:0}
+.rin{width:450px;padding:16px;display:flex;flex-direction:column;gap:14px}
+.form-card{padding:18px;flex:none}
+.presets{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.od{position:relative}
+.swap{position:absolute;right:10px;top:62px;z-index:5;border-radius:50%}
+.suggest{position:absolute;top:100%;left:0;right:0;z-index:50;margin-top:6px;padding:4px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-sm);box-shadow:var(--shadow-lg);opacity:0}
+.suggest .it{width:100%;display:flex;gap:11px;align-items:center;border-radius:9px;padding:9px 10px;position:relative}
+.suggest .it .hl{position:absolute;inset:0;border-radius:9px;background:var(--accent-soft);opacity:0}
+.suggest .it>*{position:relative}
+.suggest .t{font-size:13.5px;font-weight:600}
+.suggest .s{font-size:12px;color:var(--muted)}
+.type-ico{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;flex:none;background:var(--surface-2)}
+.advanced{border-top:1px solid var(--line);padding-top:12px;font-size:13px;font-weight:600;color:var(--text-2);display:flex;align-items:center;gap:7px}
+.option{padding:15px 16px;border-radius:var(--radius);border:1.5px solid var(--line);background:var(--surface);box-shadow:var(--shadow-sm);display:flex;flex-direction:column;gap:12px;text-align:left;width:100%;flex:none;position:relative}
+.option .selring{position:absolute;inset:-1.5px;border-radius:var(--radius);border:1.5px solid var(--accent);box-shadow:0 0 0 4px var(--accent-soft),var(--shadow);opacity:0;pointer-events:none}
+.option-top{display:flex;align-items:center;gap:6px}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.kpi .v{font-size:18px;font-weight:800;letter-spacing:-.02em;color:var(--text);font-variant-numeric:tabular-nums}
+.kpi .k{font-size:12px;color:var(--muted);font-weight:500}
+.mode-strip{display:flex;height:6px;border-radius:3px;overflow:hidden;gap:2px}
+.band{position:relative;height:26px;margin-top:4px}
+.band .track{position:absolute;left:0;right:0;top:11px;height:4px;border-radius:2px;background:var(--surface-3)}
+.band .range{position:absolute;top:8px;height:10px;border-radius:5px;background:linear-gradient(90deg,var(--accent-line),var(--accent))}
+.band .mk{position:absolute;top:3px;width:4px;height:20px;border-radius:2px;background:var(--text);box-shadow:0 0 0 2px var(--surface);transform:translateX(-2px)}
+.band-labels{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);gap:8px}
+.band-labels b{color:var(--text-2);font-weight:600}
+.detail-hero{padding:18px;display:flex;flex-direction:column;gap:14px}
+.hero-eta{font-size:36px;font-weight:800;letter-spacing:-.035em;line-height:1;color:var(--text);font-variant-numeric:tabular-nums}
+.hero-eta small{font-size:14px;color:var(--muted);font-weight:600;letter-spacing:0;margin-left:6px}
+.explain{font-size:13.5px;line-height:1.6;color:var(--text-2)}
+.callout{border-radius:var(--radius-sm);padding:12px 14px;font-size:13px;line-height:1.55;display:flex;gap:10px;align-items:flex-start}
+.callout.info{background:var(--info-soft);color:var(--info-text)}
+.callout .muted{color:inherit;opacity:.8}
+.actions{display:flex;flex-wrap:wrap;gap:6px}
+.card{padding:18px}
+.stack{display:flex;height:12px;border-radius:6px;overflow:hidden;background:var(--surface-3);gap:2px}
+.legend{display:flex;flex-wrap:wrap;gap:12px;margin-top:10px;font-size:12.5px;color:var(--text-2)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.legend b{color:var(--text);font-weight:700}
+.map-wrap{position:relative;min-height:0;overflow:hidden;background:var(--map-bg)}
+#map{position:absolute;inset:0;width:100%;height:100%}
+.land{fill:#252a35;stroke:#323948;stroke-width:.8;vector-effect:non-scaling-stroke}
+.net{fill:none;stroke-width:1;vector-effect:non-scaling-stroke}
+.flow{stroke-dasharray:10 14;animation:flow 1.1s linear infinite}
+@keyframes flow{to{stroke-dashoffset:-24}}
+.map-overlay{position:absolute;z-index:600}
+.map-overlay.panel{box-shadow:var(--shadow-lg)}
+.map-legend{left:14px;bottom:14px;padding:10px 14px;display:flex;flex-direction:column;gap:7px;font-size:12px;border-radius:var(--radius-sm)}
+.map-legend .lrow{display:flex;gap:12px;flex-wrap:wrap;align-items:center;color:var(--text-2)}
+.map-legend .lrow.muted{color:var(--muted)}
+.map-legend .sw{display:inline-block;width:16px;height:4px;border-radius:2px;margin-right:6px;vertical-align:middle}
+.cb{display:inline-block;width:13px;height:13px;border-radius:3px;background:var(--accent);margin-right:6px;vertical-align:-2px}
+.cb.off{background:none;border:1.5px solid var(--line-2)}
+.map-banner{top:14px;left:50%;transform:translateX(-50%);padding:10px 16px;display:flex;gap:10px;align-items:center;font-size:13px;width:max-content;max-width:calc(100% - 28px);border-radius:999px;border-color:transparent;background:#2a1c23;color:var(--crit-text)}
+.map-stats{bottom:30px;right:14px;padding:8px 14px;font-size:12px;display:flex;gap:14px;border-radius:999px;color:var(--text-2)}
+.map-stats b{color:var(--text);margin-right:4px}
+.map-empty{top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;padding:28px 30px;width:390px;border-radius:20px}
+.map-empty .hello{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent);margin:0 auto 14px}
+.map-empty h3{font-size:20px;margin-bottom:8px;letter-spacing:-.02em}
+.map-empty p{font-size:14px;color:var(--text-2);line-height:1.55}
+.toasts{position:absolute;top:76px;right:18px;z-index:3000;width:390px}
+.toast{padding:14px 16px;display:grid;grid-template-columns:22px 1fr 22px;gap:11px;border-left:4px solid var(--crit);box-shadow:var(--shadow-lg);opacity:0}
+.toast h5{font-size:13.5px;margin-bottom:3px}
+.toast p{font-size:12.5px;color:var(--text-2);line-height:1.5}
+.mtip{font:600 12.5px var(--font);fill:var(--text)}
+
+
+.page{position:absolute;inset:0;z-index:900;overflow:hidden;padding:28px 24px;background:var(--bg);opacity:0}
+.page-inner{max-width:1200px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px}
+.page-head h1{font-size:28px;letter-spacing:-.03em;font-weight:800}
+.page-head p{color:var(--text-2);margin-top:6px;font-size:14.5px;max-width:720px;line-height:1.6}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.scenario-card{padding:18px;border-radius:var(--radius);border:1px solid var(--line);background:var(--surface);box-shadow:var(--shadow-sm);display:flex;flex-direction:column;gap:10px;position:relative}
+.scenario-card .lring{position:absolute;inset:-1px;border-radius:var(--radius);border:1px solid var(--crit);box-shadow:0 0 0 4px var(--crit-soft);opacity:0;pointer-events:none}
+.scenario-card h4{font-size:15px;display:flex;justify-content:space-between;gap:8px;align-items:center}
+.scenario-card p{font-size:13px;color:var(--text-2);line-height:1.5}
+.panel-h{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 18px 10px}
+.panel-h h2{font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px}
+.alert-item{padding:16px 18px;display:grid;grid-template-columns:4px 1fr auto;gap:14px}
+.alert-item h4{font-size:14px;margin-bottom:4px}
+.alert-item p{font-size:13px;color:var(--text-2);line-height:1.55}
+.empty{display:grid;place-items:center;text-align:center;color:var(--muted);padding:34px 18px;gap:10px}
+.btn.danger{border-color:transparent;color:var(--crit-text);background:var(--crit-soft)}
+.btn.ghost{background:none;border-color:transparent}
+.chip.crit{color:var(--crit-text);background:var(--crit-soft)} .chip.high{color:var(--high-text);background:var(--high-soft)}
+.spinner.light{border-color:var(--line-2);border-top-color:var(--accent)}
+.leg{display:grid;grid-template-columns:30px 1fr auto;gap:11px;padding:9px 0;position:relative}
+.leg+.leg::before{content:'';position:absolute;left:14px;top:-10px;height:20px;width:2px;background:var(--line)}
+.leg-ico{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;background:var(--surface-2);z-index:1}
+.leg-title{font-size:13.5px;font-weight:600}
+.leg-sub{font-size:12px;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap;margin-top:2px;align-items:center}
+.leg-right{text-align:right;font-size:12.5px;font-weight:600;white-space:nowrap}
+.leg-right .muted{font-weight:500}
+.leg.handoff{padding:3px 0}.leg.handoff .leg-ico{height:20px;background:none}.leg.handoff .leg-title{font-size:12px;color:var(--muted);font-weight:500}.leg.handoff .leg-right{font-weight:500;color:var(--muted)}
+.leg.hit .leg-ico{background:var(--crit-soft)}
+.leg-reason{font-size:12px;color:var(--crit-text);margin-top:4px;line-height:1.45}
+.mode-SEA{color:var(--sea)}
+.shap-row{display:grid;grid-template-columns:160px 1fr 60px;gap:10px;align-items:center;font-size:12.5px;padding:5px 0}
+.shap-row .f{font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.shap-row .f small{display:block;color:var(--muted);font-size:11.5px;font-weight:400}
+.shap-bar{position:relative;height:12px}
+.shap-bar::before{content:'';position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:var(--line-2)}
+.shap-bar span{position:absolute;top:0;height:12px;border-radius:4px}
+.intel-item{border:1px solid var(--line);border-radius:var(--radius-sm);padding:12px 14px;display:flex;flex-direction:column;gap:6px;background:var(--surface)}
+.intel-item ul{list-style:none;display:flex;flex-direction:column;gap:3px}
+.intel-item li{font-size:12.5px;color:var(--text-2);line-height:1.45;padding-left:12px;position:relative}
+.intel-item li::before{content:'•';position:absolute;left:0;color:var(--muted)}
+/* PDF report sheet (flies out of the "PDF report" button) */
+#pdf{position:absolute;left:690px;top:95px;width:540px;z-index:26;opacity:0;pointer-events:none}
+#pdf .fname{display:inline-flex;align-items:center;gap:8px;margin:0 0 12px 4px;padding:7px 14px;border-radius:10px;background:rgba(14,17,24,.9);border:1px solid var(--line-2);font-size:14px;font-weight:600;color:var(--text)}
+.sheet{background:#fff;color:#151823;border-radius:6px;padding:34px 36px;box-shadow:0 50px 120px rgba(0,0,0,.65);font-size:12px;line-height:1.45}
+.sheet .sh{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #3355ff;padding-bottom:12px}
+.sheet .sb{display:flex;align-items:center;gap:9px;font-weight:800;font-size:15px}
+.sheet .sb i{width:26px;height:26px;border-radius:8px;background:#3355ff;display:grid;place-items:center;color:#fff}
+.sheet h2{font-size:21px;letter-spacing:-.02em;margin-top:18px}
+.sheet .sub{color:#4a5263;margin-top:3px}
+.sheet .k3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
+.sheet .k3 div{background:#f1f3f8;border-radius:10px;padding:10px 12px}
+.sheet .k3 b{display:block;font-size:18px;letter-spacing:-.02em}
+.sheet .k3 span{color:#858d9e;font-size:11px}
+.sheet h3{font-size:12.5px;margin:16px 0 6px}
+.sheet table{width:100%;border-collapse:collapse}
+.sheet td,.sheet th{padding:6px 4px;border-bottom:1px solid #e4e7ee;text-align:left;font-size:11.5px}
+.sheet th{color:#858d9e;font-weight:600}
+.sheet .bar{height:8px;border-radius:4px;background:#e9ecf3;position:relative;margin-top:6px}
+.sheet .bar i{position:absolute;top:0;height:8px;border-radius:4px;background:linear-gradient(90deg,#c9d3ff,#3355ff)}
+.sheet .ft{margin-top:16px;color:#858d9e;font-size:10.5px;display:flex;justify-content:space-between}
+/* ===== player chrome ===== */
+#ctl{position:absolute;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);width:min(760px,calc(100% - 32px));display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:16px;background:rgba(14,17,24,.82);border:1px solid rgba(160,180,255,.18);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);transition:opacity .35s;z-index:100;font:600 14px var(--font);color:var(--muted)}
+#ctl.hide{opacity:0;pointer-events:none}
+#ctl button{flex:none;width:38px;height:38px;border-radius:10px;border:0;background:rgba(255,255,255,.06);color:var(--text);display:grid;place-items:center;cursor:pointer}
+#ctl button:hover{background:rgba(255,255,255,.12)}
+#ctl button:focus-visible,#seek:focus-visible,#big:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+#ctl svg{width:18px;height:18px;fill:currentColor}
+#seek{flex:1;min-width:0;accent-color:var(--accent);cursor:pointer}
+.t{font-variant-numeric:tabular-nums;min-width:36px;text-align:center}
+#big{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:108px;height:108px;border-radius:50%;border:0;cursor:pointer;z-index:101;background:var(--accent);color:var(--accent-ink);display:none;place-items:center;box-shadow:0 0 90px rgba(111,139,255,.55)}
+#big svg{width:44px;height:44px;fill:currentColor}
+#big.show{display:grid}
+</style>
+</head>
+<body>
+<div id="vp">
+<div id="stage" role="img" aria-label="Animated promo video for Supplychainer">
+  <div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>
+  <div class="grid"></div><div class="grain"></div>
+
+  <div id="globeWrap">
+    <svg id="globe" viewBox="-400 -400 800 800" aria-hidden="true">
+      <defs>
+        <radialGradient id="sph" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#1e2a5e"/><stop offset=".6" stop-color="#0d1330"/><stop offset="1" stop-color="#070a18"/></radialGradient>
+        <linearGradient id="arcG" gradientUnits="userSpaceOnUse" x1="-320" y1="-200" x2="320" y2="200"><stop stop-color="#38b2f0"/><stop offset=".55" stop-color="#6f8bff"/><stop offset="1" stop-color="#a78bfa"/></linearGradient>
+        <filter id="blur18" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="18"/></filter>
+        <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <circle r="312" fill="none" stroke="#6f8bff" stroke-opacity=".25" stroke-width="22" filter="url(#blur18)"/>
+      <circle r="300" fill="url(#sph)" stroke="rgba(111,139,255,.4)" stroke-width="1.2"/>
+      <path id="grat"/><g id="gnodes"></g><g id="arcs" filter="url(#glow)"></g>
+    </svg>
+  </div>
+
+  <div id="title">
+    <div class="mark" id="tmark"><i data-i="route" data-s="44" data-w="2.4"></i></div>
+    <h1 id="word" aria-label="Supplychainer"></h1>
+    <p id="tag">Smarter, disruption-aware shipping routes</p>
+  </div>
+
+  <div id="stat"><div id="num">0</div><p>real ports and airports.<span>Pick any two. Supplychainer finds the way between them.</span></p></div>
+
+  <div id="cam">
+    <div id="win">
+      <div class="chrome"><i></i><i></i><i></i>
+        <div class="url"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>supplychainer.onrender.com</div>
+      </div>
+      <div class="app">
+        <header class="topbar">
+          <div class="brand"><div class="brand-mark"><i data-i="route" data-s="18" data-w="2.4"></i></div>
+            <div><span class="name">Supplychainer</span><small>Smarter, disruption-aware shipping routes</small></div></div>
+          <nav class="nav">
+            <button class="active" id="navPlan"><i data-i="route" data-s="15"></i><span>Plan a route</span></button>
+            <button id="navAlerts"><i data-i="bellring" data-s="15"></i><span>Disruptions</span><span class="count" id="navCount">1</span></button>
+            <button><i data-i="history" data-s="15"></i><span>Saved routes</span></button>
+            <button><i data-i="factory" data-s="15"></i><span>Suppliers</span></button>
+            <button><i data-i="plug" data-s="15"></i><span>Integrations</span></button>
+          </nav>
+          <div class="topbar-right">
+            <span class="pill live" id="livePill"><span class="dot crit"></span>Live: Rotterdam port strike</span>
+            <span class="pill"><span class="dot ok"></span>All systems ready</span>
+            <span class="theme-btn"><i data-i="sun" data-s="17"></i></span>
+          </div>
+        </header>
+        <main class="view">
+          <div class="planner" id="planner">
+            <aside class="side left" id="sideL">
+              <div class="panel form-card">
+                <div class="section-title" style="margin-top:0"><i data-i="sparkles" data-s="15"></i> Try a sample trip</div>
+                <div class="presets"><span class="chip click">Shanghai → Rotterdam</span><span class="chip click">Mumbai → Hamburg</span><span class="chip click">Shenzhen → Los Angeles</span></div>
+                <div class="od">
+                  <div class="field"><label>From</label>
+                    <div class="input" id="inFrom"><span class="ph">Search a port, airport or city</span><span class="txt"></span><span class="caret"></span></div>
+                    <div class="suggest" id="sgFrom">
+                      <div class="it"><div class="hl"></div><span class="type-ico"><i data-i="anchor" data-s="15" data-c="#1597d8"></i></span><div><div class="t">Port of Shanghai</div><div class="s">PORT-SHANGHAI · China · sea / rail</div></div></div>
+                      <div class="it"><div class="hl"></div><span class="type-ico"><i data-i="plane" data-s="15" data-c="#8b5cf6"></i></span><div><div class="t">Shanghai Pudong Airport</div><div class="s">AIR-SHANGHAI · China · air / road</div></div></div>
+                      <div class="it"><div class="hl"></div><span class="type-ico"><i data-i="train" data-s="15" data-c="#e59a12"></i></span><div><div class="t">Shanghai Rail Hub</div><div class="s">RAIL-SHANGHAI · China · rail / road</div></div></div>
+                    </div>
+                  </div>
+                  <span class="icon-btn swap"><i data-i="updown" data-s="14"></i></span>
+                  <div class="field"><label>To</label>
+                    <div class="input" id="inTo"><span class="ph">Search a port, airport or city</span><span class="txt"></span><span class="caret"></span></div>
+                    <div class="suggest" id="sgTo">
+                      <div class="it"><div class="hl"></div><span class="type-ico"><i data-i="anchor" data-s="15" data-c="#1597d8"></i></span><div><div class="t">Port of Rotterdam</div><div class="s">PORT-ROTTERDAM · Netherlands · sea / rail / road</div></div></div>
+                      <div class="it"><div class="hl"></div><span class="type-ico"><i data-i="plane" data-s="15" data-c="#8b5cf6"></i></span><div><div class="t">Rotterdam The Hague Airport</div><div class="s">AIR-ROTTERDAM · Netherlands · air / road</div></div></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="field"><span class="label">How should it travel?</span>
+                  <div class="seg"><button class="on">Any</button><button><i data-i="ship" data-s="12" data-c="#1597d8"></i>Sea</button><button><i data-i="plane" data-s="12" data-c="#8b5cf6"></i>Air</button><button><i data-i="train" data-s="12" data-c="#e59a12"></i>Rail</button><button><i data-i="truck" data-s="12" data-c="#14a594"></i>Road</button></div></div>
+                <div class="field"><label>What are you shipping?</label><div class="select">General cargo — All modes</div></div>
+                <div class="field"><span class="label">How urgent is it?</span><div class="seg"><button>Low</button><button class="on">Normal</button><button>Urgent</button></div></div>
+                <div class="field"><label>Simulate a disruption (optional)</label>
+                  <div class="select" id="scnSel"><span id="scnTxt">None, a normal week</span></div>
+                  <div class="suggest" id="sgScn">
+                    <div class="it"><div class="hl"></div><div class="t" style="font-weight:500">None, a normal week</div></div>
+                    <div class="it"><div class="hl"></div><div class="t">Suez Canal blockage</div></div>
+                    <div class="it"><div class="hl"></div><div class="t" style="font-weight:500">Red Sea conflict</div></div>
+                    <div class="it"><div class="hl"></div><div class="t" style="font-weight:500">Los Angeles port strike</div></div>
+                  </div>
+                </div>
+                <div class="advanced"><i data-i="sliders" data-s="14"></i> More options</div>
+                <button class="btn primary block" id="findBtn" style="margin-top:14px;padding:12px;position:relative">
+                  <span id="fb1" style="display:flex;gap:8px;align-items:center"><i data-i="zap" data-s="16"></i> Find routes</span>
+                  <span id="fb2" style="position:absolute;inset:0;display:flex;gap:8px;align-items:center;justify-content:center;opacity:0"><span class="spinner"></span> Finding routes…</span>
+                </button>
+              </div>
+
+              <div id="opts" style="display:flex;flex-direction:column;gap:10px">
+                <div class="section-title" id="optTitle" style="margin:2px 2px 0"><i data-i="waypoints" data-s="15"></i> 3 options found · pick one to see details</div>
+                <div class="option" id="op1">
+                  <div class="option-top"><span class="badge FASTEST">Fastest</span><span class="chip" style="margin-left:auto"><i data-i="plane" data-s="13" data-c="#8b5cf6"></i> Air</span></div>
+                  <div class="kpis"><div class="kpi"><div class="v">3.1d</div><div class="k">Arrival</div></div><div class="kpi"><div class="v">$48.6k</div><div class="k">Total cost</div></div><div class="kpi"><div class="v"><span class="text-ok">Low</span></div><div class="k">Risk</div></div></div>
+                  <div class="band" data-b="2.6,3.1,3.9"></div>
+                  <div class="mode-strip"><span style="width:4%;background:#14a594"></span><span style="width:96%;background:#8b5cf6"></span></div>
+                </div>
+                <div class="option" id="op2"><div class="selring"></div>
+                  <div class="option-top"><span class="badge BALANCED">Best value</span><span class="chip" style="margin-left:auto"><i data-i="ship" data-s="13" data-c="#1597d8"></i> Sea</span></div>
+                  <div class="kpis"><div class="kpi"><div class="v">38.4d</div><div class="k">Arrival</div></div><div class="kpi"><div class="v">$6,240</div><div class="k">Total cost</div></div><div class="kpi"><div class="v"><span class="text-warn">Moderate</span></div><div class="k">Risk</div></div></div>
+                  <div class="band" data-b="34.8,38.4,42.6"></div>
+                  <div class="mode-strip"><span style="width:97%;background:#1597d8"></span><span style="width:3%;background:#8a94a6"></span></div>
+                  <div class="dim" style="font-size:12.5px">↻ Rerouted around the disruption · <span class="text-crit" style="font-weight:700">+9.2d</span> vs a normal week</div>
+                </div>
+                <div class="option" id="op3">
+                  <div class="option-top"><span class="badge SAFEST">Most reliable</span><span class="chip" style="margin-left:auto"><i data-i="train" data-s="13" data-c="#e59a12"></i> Rail</span></div>
+                  <div class="kpis"><div class="kpi"><div class="v">21.5d</div><div class="k">Arrival</div></div><div class="kpi"><div class="v">$11.8k</div><div class="k">Total cost</div></div><div class="kpi"><div class="v"><span class="text-ok">Low</span></div><div class="k">Risk</div></div></div>
+                  <div class="band" data-b="19.9,21.5,24.0"></div>
+                  <div class="mode-strip"><span style="width:3%;background:#14a594"></span><span style="width:97%;background:#e59a12"></span></div>
+                </div>
+              </div>
+            </aside>
+
+            <div class="map-wrap" id="mapWrap">
+              <svg id="map" aria-hidden="true">
+                <rect x="-4000" y="-4000" width="12000" height="10000" fill="#1a1d24"/>
+                <g id="landG"></g><g id="netG"></g><g id="hubG"></g><g id="altG"></g><g id="routeG"></g><g id="mkG"></g>
+              </svg>
+              <div class="map-overlay map-banner panel" id="banner"><i data-i="alert" data-s="16"></i><span><b>Simulating:</b> Suez Canal blockage. Ships can’t use the canal, so sea routes must go around Africa.</span></div>
+              <div class="map-overlay map-empty panel" id="mapEmpty">
+                <div class="hello"><i data-i="globe" data-s="26"></i></div>
+                <h3>Where are you shipping today?</h3>
+                <p>Choose where your cargo starts and ends, or try a sample trip. We’ll compare the fastest, best-value and most reliable routes, and warn you about anything that could slow them down.</p>
+              </div>
+              <div class="map-overlay map-legend panel">
+                <div class="lrow"><span><i class="cb"></i><span class="sw" style="background:#1597d8"></span>Sea</span><span><i class="cb off"></i><span class="sw" style="background:#8b5cf6"></span>Air</span><span><i class="cb"></i><span class="sw" style="background:#e59a12"></span>Rail</span><span><i class="cb off"></i><span class="sw" style="background:#14a594"></span>Road</span><span><i class="cb"></i>Hubs</span></div>
+                <div class="lrow muted"><span><span class="sw" style="background:#ff6369"></span>Disrupted leg</span><span><span class="sw" style="background:#e59a12;height:8px;width:8px;border-radius:4px"></span>Strait or canal</span></div>
+              </div>
+              <div class="map-overlay map-stats panel"><span><b>444</b>ports &amp; hubs</span></div>
+            </div>
+
+            <aside class="side right" id="sideR"><div class="rin" id="rin">
+              <div class="callout info" id="watchNote" style="font-size:12.5px;display:none">You’re watching this route. We’ll alert you if a disruption affects it.</div>
+              <div class="panel detail-hero" id="hero">
+                <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"><span class="badge BALANCED">Best value</span><span class="chip"><i data-i="ship" data-s="13" data-c="#1597d8"></i> Sea</span><span class="chip warn"><i data-i="shield" data-s="13"></i> Moderate risk</span></div>
+                <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:10px">
+                  <div><div class="label" style="margin-bottom:6px">Expected arrival</div><div class="hero-eta">38.4 days<small>922h</small></div></div>
+                  <div style="text-align:right"><div class="label" style="margin-bottom:6px">Total cost</div><div style="font-size:26px;font-weight:800;letter-spacing:-.02em">$6,240</div></div>
+                </div>
+                <div id="heroBand"><div class="band" data-b="34.8,38.4,42.6"></div>
+                  <div class="band-labels"><span>Typical <b>34.8d</b></span><span>Planned <b>38.4d</b></span><span>Worst case <b>42.6d</b></span></div></div>
+                <div class="muted" style="font-size:12px;margin-top:-6px">85% of shipments on this route arrive within the planned time; 1 in 20 may take up to the worst case.</div>
+                <div class="callout info" id="impact"><i data-i="corner" data-s="16"></i><div><b>Suez Canal blockage:</b> we found a way around it. <b>+9.2d</b> and <b>+$1,180</b> compared with a normal week (29.2d, $5,060).
+                  <div class="muted" style="margin-top:4px;font-size:12px">Usual route: Port of Shanghai → Port of Singapore → Suez Canal → Port of Rotterdam</div></div></div>
+                <div class="actions">
+                  <button class="btn sm" id="watchBtn" style="position:relative"><span id="wb1" style="display:flex;gap:8px;align-items:center"><i data-i="belloff" data-s="14"></i> Watch this route</span>
+                    <span id="wb2" style="position:absolute;inset:0;display:flex;gap:8px;align-items:center;justify-content:center;opacity:0"><i data-i="bell" data-s="14"></i> Watching</span></button>
+                  <span class="btn sm" id="pdfBtn"><i data-i="file" data-s="14"></i> PDF report</span>
+                  <span class="btn sm"><i data-i="file" data-s="14"></i> Spreadsheet</span>
+                  <span class="btn sm"><i data-i="braces" data-s="14"></i> TMS file</span>
+                </div>
+              </div>
+              <div class="panel card">
+                <div class="section-title" style="margin-top:0">Where the time goes</div>
+                <div class="stack"><span style="width:71.6%;background:#1597d8"></span><span style="width:5.5%;background:#8a94a6"></span><span style="width:9.4%;background:#8b5cf6"></span><span style="width:13.5%;background:#e5484d"></span></div>
+                <div class="legend"><span><i style="background:#1597d8"></i>Travelling <b>27.5d</b></span><span><i style="background:#8a94a6"></i>Loading &amp; transfers <b>2.1d</b></span><span><i style="background:#8b5cf6"></i>Predicted waiting time <b>3.6d</b></span><span><i style="background:#e5484d"></i>Disruption <b>5.2d</b></span></div>
+              </div>
+              <div class="panel card">
+                <div class="section-title" style="margin-top:0">Step by step</div>
+                <div class="timeline">
+                  <div class="leg"><div class="leg-ico"><i data-i="ship" data-s="14" data-c="#1597d8"></i></div><div><div class="leg-title">Port of Singapore</div><div class="leg-sub"><span class="mode-SEA" style="font-weight:700">Sea</span><span>4,120 km</span><span>5.9d travel</span><span>+ 1.7d waiting</span><span class="chip warn" style="padding:1px 8px">Congestion</span></div></div><div class="leg-right">7.6d<div class="muted">$1,180</div></div></div>
+                  <div class="leg handoff"><div class="leg-ico"><i data-i="updown" data-s="12" data-c="#8a94a6"></i></div><div><div class="leg-title">Transfer at Port of Singapore · 14h</div></div><div class="leg-right">$240</div></div>
+                  <div class="leg"><div class="leg-ico"><i data-i="ship" data-s="14" data-c="#1597d8"></i></div><div><div class="leg-title">Colombo Port</div><div class="leg-sub"><span class="mode-SEA" style="font-weight:700">Sea</span><span>3,050 km</span><span>4.4d travel</span><span>+ 22h waiting</span></div></div><div class="leg-right">5.3d<div class="muted">$890</div></div></div>
+                  <div class="leg hit"><div class="leg-ico"><i data-i="ship" data-s="14" data-c="#1597d8"></i></div><div><div class="leg-title">Port of Cape Town</div><div class="leg-sub"><span class="mode-SEA" style="font-weight:700">Sea</span><span>7,480 km</span><span>10.7d travel</span><span>+ 14h waiting</span></div><div class="leg-reason"><b>+5.2d · </b>Rerouted around the Suez Canal blockage</div></div><div class="leg-right">11.3d<div class="muted">$1,640</div></div></div>
+                  <div class="leg"><div class="leg-ico"><i data-i="ship" data-s="14" data-c="#1597d8"></i></div><div><div class="leg-title">Port of Rotterdam</div><div class="leg-sub"><span class="mode-SEA" style="font-weight:700">Sea</span><span>9,960 km</span><span>13.9d travel</span><span>+ 7h waiting</span></div></div><div class="leg-right">14.2d<div class="muted">$2,290</div></div></div>
+                </div>
+              </div>
+              <div class="panel card" id="drvCard">
+                <div class="section-title" style="margin-top:0"><i data-i="sparkles" data-s="15"></i> Why this wait?</div>
+                <div class="dim" style="font-size:13px;margin-bottom:10px;line-height:1.55">The biggest wait is on <b style="color:var(--text)">Port of Singapore</b>. An average leg waits <b style="color:var(--text)">18h</b>; this one is predicted at <b style="color:var(--text)">41h</b>. Here is what adds or removes time:</div>
+                <div class="shap-row"><div class="f">Port congestion<small>High</small></div><div class="shap-bar"><span class="sbar" style="left:50%;width:50.0%;background:#e5484d;transform-origin:left center"></span></div><div class="text-crit" style="text-align:right;font-weight:700">+16.2h</div></div><div class="shap-row"><div class="f">Transport mode<small>Sea</small></div><div class="shap-bar"><span class="sbar" style="left:50%;width:18.82716049382716%;background:#e5484d;transform-origin:left center"></span></div><div class="text-crit" style="text-align:right;font-weight:700">+6.1h</div></div><div class="shap-row"><div class="f">Season<small>Monsoon</small></div><div class="shap-bar"><span class="sbar" style="left:50%;width:13.271604938271606%;background:#e5484d;transform-origin:left center"></span></div><div class="text-crit" style="text-align:right;font-weight:700">+4.3h</div></div><div class="shap-row"><div class="f">Leg distance<small>4,120 km</small></div><div class="shap-bar"><span class="sbar" style="left:46.91358024691358%;width:3.08641975308642%;background:#10a37f;transform-origin:right center"></span></div><div class="text-ok" style="text-align:right;font-weight:700">-1.0h</div></div><div class="shap-row"><div class="f">Carrier reliability<small>0.91</small></div><div class="shap-bar"><span class="sbar" style="left:41.97530864197531%;width:8.024691358024691%;background:#10a37f;transform-origin:right center"></span></div><div class="text-ok" style="text-align:right;font-weight:700">-2.6h</div></div>
+                <div class="muted" style="font-size:11.5px;margin-top:8px">Method: SHAP values on the p85 delay model</div>
+              </div>
+              <div class="panel card" id="newsCard">
+                <div class="section-title" style="margin-top:0"><i data-i="radar" data-s="15"></i> Latest news on this route</div>
+                <div class="dim" style="font-size:13px;margin-bottom:12px;line-height:1.55">Check today’s headlines for the main ports and straits on this route. Each story is scored for how serious it is and whether it affects this kind of transport.</div>
+                <button class="btn sm" id="newsBtn" style="position:relative"><span id="nb1" style="display:flex;gap:8px;align-items:center"><i data-i="radar" data-s="14"></i> Check news for 4 stops</span><span id="nb2" style="position:absolute;inset:0;display:flex;gap:8px;align-items:center;justify-content:center;opacity:0"><span class="spinner light"></span> Check news for 4 stops</span></button>
+                <div id="newsList" style="display:flex;flex-direction:column;gap:8px;margin-top:12px">
+                  <div class="intel-item"><div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><b style="font-size:13px">Port of Singapore</b><span class="chip warn">Moderate risk</span><span class="chip">Congestion</span><span class="chip" style="margin-left:auto">Live news</span></div>
+                    <ul><li>Vessel queues lengthen at Singapore as transshipment volumes climb</li><li>Carriers add buffer days to Asia–Europe loops</li></ul><div class="muted" style="font-size:11.5px">Severity 0.58 · relevance: sea event on a sea leg</div></div>
+                  <div class="intel-item"><div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><b style="font-size:13px">Cape of Good Hope</b><span class="chip warn">Moderate risk</span><span class="chip">Weather</span><span class="chip" style="margin-left:auto">Live news</span></div>
+                    <ul><li>Winter swells slow ships rounding the Cape</li><li>More Asia–Europe services diverted south of Africa</li></ul><div class="muted" style="font-size:11.5px">Severity 0.47 · relevance: sea event on a sea leg</div></div>
+                  <div class="intel-item"><div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><b style="font-size:13px">Port of Rotterdam</b><span class="chip ok">Low risk</span><span class="chip" style="margin-left:auto">Recent news</span></div>
+                    <ul><li>Rotterdam terminals report normal operations this week</li></ul><div class="muted" style="font-size:11.5px">Severity 0.12 · relevance: sea event on a sea leg</div></div>
+                </div>
+              </div>
+            </div></aside>
+          </div>
+          <div class="page" id="viewAlerts"><div class="page-inner">
+            <div class="page-head"><div><h1>Disruptions</h1><p>Turn on a disruption to see who it affects. Every route you’re <b>watching</b> that passes through the affected place gets an instant alert with a suggested new plan.</p></div>
+              <div style="display:flex;gap:8px"><span class="pill"><i data-i="bell" data-s="14"></i> Watching 1 route</span><button class="btn danger" id="endBtn"><i data-i="shieldoff" data-s="15"></i> End disruption</button></div></div>
+            <div class="callout info" id="liveCallout"><i data-i="siren" data-s="16"></i> Rotterdam port strike is now live. 1 watched route was affected.</div>
+            <div class="grid-3"><div class="scenario-card"><h4>Suez Canal blockage </h4><p>A grounded ship closes the canal. Sea routes must wait or go around Africa.</p><div style="display:flex;gap:6px;flex-wrap:wrap"><span class="chip">Blockage</span><span class="chip">+7.0d delay</span><span class="chip crit">Severe risk</span></div><div class="muted" style="font-size:12.5px">Affects Suez Canal</div><button class="btn sm primary" style="align-self:flex-start;margin-top:4px"><i data-i="radio" data-s="14"></i> Go live</button></div><div class="scenario-card"><h4>Red Sea conflict </h4><p>Attacks near Bab el-Mandeb push carriers away from the Red Sea.</p><div style="display:flex;gap:6px;flex-wrap:wrap"><span class="chip">Conflict</span><span class="chip">+10.0d delay</span><span class="chip crit">Severe risk</span></div><div class="muted" style="font-size:12.5px">Affects Bab el-Mandeb, Suez Canal</div><button class="btn sm primary" style="align-self:flex-start;margin-top:4px"><i data-i="radio" data-s="14"></i> Go live</button></div><div class="scenario-card"><h4>Los Angeles port strike </h4><p>Dockworkers walk out at the Los Angeles and Long Beach terminals.</p><div style="display:flex;gap:6px;flex-wrap:wrap"><span class="chip">Labour</span><span class="chip">+4.5d delay</span><span class="chip high">High risk</span></div><div class="muted" style="font-size:12.5px">Affects Los Angeles Logistics Hub</div><button class="btn sm primary" style="align-self:flex-start;margin-top:4px"><i data-i="radio" data-s="14"></i> Go live</button></div><div class="scenario-card" id="scRtm"><div class="lring"></div><h4>Rotterdam port strike <span class="chip crit" id="liveChip"><span class="dot crit"></span> Live</span></h4><p>Terminal workers stop loading and unloading at Europe’s largest port.</p><div style="display:flex;gap:6px;flex-wrap:wrap"><span class="chip">Labour</span><span class="chip">+2.5d delay</span><span class="chip high">High risk</span></div><div class="muted" style="font-size:12.5px">Affects Port of Rotterdam</div><span style="position:relative;align-self:flex-start;margin-top:4px" id="goLive"><button class="btn sm primary" id="gl1"><i data-i="radio" data-s="14"></i> Go live</button><button class="btn sm" id="gl2" style="position:absolute;inset:0;opacity:0"><i data-i="radio" data-s="14"></i> Active now</button></span></div><div class="scenario-card"><h4>Typhoon near Shanghai </h4><p>A typhoon shuts the port and airport for several days.</p><div style="display:flex;gap:6px;flex-wrap:wrap"><span class="chip">Weather</span><span class="chip">+2.0d delay</span><span class="chip high">High risk</span></div><div class="muted" style="font-size:12.5px">Affects Port of Shanghai, Shanghai Pudong Airport</div><button class="btn sm primary" style="align-self:flex-start;margin-top:4px"><i data-i="radio" data-s="14"></i> Go live</button></div><div class="scenario-card"><h4>Panama Canal drought </h4><p>Low water limits how many ships can cross each day.</p><div style="display:flex;gap:6px;flex-wrap:wrap"><span class="chip">Weather</span><span class="chip">+3.0d delay</span><span class="chip warn">Moderate risk</span></div><div class="muted" style="font-size:12.5px">Affects Panama Canal</div><button class="btn sm primary" style="align-self:flex-start;margin-top:4px"><i data-i="radio" data-s="14"></i> Go live</button></div></div>
+            <div class="panel" id="alertsPanel"><div class="panel-h"><h2><i data-i="siren" data-s="16"></i> Alerts</h2><button class="btn sm" id="markAll"><i data-i="check" data-s="14"></i> Mark all as read</button></div>
+              <div style="display:grid">
+                <div class="empty" id="noAlerts" style="grid-area:1/1"><i data-i="bell" data-s="34"></i><div>No alerts yet. Watch a route in the planner, then turn on a disruption here.</div></div>
+                <div class="alert-item" id="alertItem" style="grid-area:1/1;opacity:0"><div style="background:#f06a1c;border-radius:2px"></div>
+                  <div><h4>A disruption hit a route you’re watching <span class="chip high" style="margin-left:6px">High</span></h4><p>Rotterdam port strike: your Best value route from Port of Shanghai could arrive about 2.5 days later.</p>
+                    <div class="muted" style="font-size:12.5px;margin-top:6px">Suggested best value route: 39.6d · $6,410 · via Port of Singapore → Colombo Port → Port of Cape Town → Port of Antwerp</div>
+                    <div class="muted" style="font-size:11.5px;margin-top:6px">2s ago</div></div>
+                  <div style="display:flex;flex-direction:column;gap:6px"><button class="btn sm"><i data-i="external" data-s="13"></i> Open route</button><button class="btn sm ghost">Mark read</button></div></div>
+              </div></div>
+          </div></div>
+        </main>
+        <div class="toasts"><div class="toast panel" id="toast">
+          <i data-i="alert" data-s="18" data-c="#e5484d"></i>
+          <div><h5>A disruption hit a route you’re watching</h5><p>Rotterdam port strike: your Best value route from Port of Shanghai could arrive about 2.5 days later.</p>
+            <button class="btn sm" id="openRoute" style="margin-top:8px">Open route</button></div>
+          <span class="icon-btn" style="width:24px;height:24px;border:0;box-shadow:none"><i data-i="x" data-s="13"></i></span>
+        </div></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="outro">
+    <div class="mark o-el"><i data-i="route" data-s="44" data-w="2.4"></i></div>
+    <h3 class="o-el"><span class="gtext">Supplychainer</span></h3>
+    <div class="ol o-el">The fastest, best-value and most reliable way to ship between 12,738 ports and 3,244 airports, with a warning before a disruption can delay it.</div>
+    <div class="url o-el">supplychainer.onrender.com</div>
+  </div>
+
+  <div id="pdf"><div class="fname"><i data-i="download" data-s="15"></i> route-report.pdf</div>
+    <div class="sheet">
+      <div class="sh"><div class="sb"><i><i data-i="route" data-s="15" data-w="2.4"></i></i>Supplychainer</div><span style="color:#858d9e">Route report</span></div>
+      <h2>Port of Shanghai → Port of Rotterdam</h2>
+      <div class="sub">Best value · Sea · Simulating: Suez Canal blockage</div>
+      <div class="k3"><div><span>Expected arrival</span><b>38.4 days</b></div><div><span>Total cost</span><b>$6,240</b></div><div><span>Risk</span><b style="color:#935c00">Moderate</b></div></div>
+      <h3>Arrival range</h3>
+      <div class="bar"><i style="left:74%;width:15%"></i></div>
+      <div style="display:flex;justify-content:space-between;color:#858d9e;font-size:11px;margin-top:6px"><span>Typical <b style="color:#151823">34.8d</b></span><span>Planned <b style="color:#151823">38.4d</b></span><span>Worst case <b style="color:#151823">42.6d</b></span></div>
+      <h3>Step by step</h3>
+      <table><tr><th>Stop</th><th>Mode</th><th>Distance</th><th>Time</th><th>Cost</th></tr>
+        <tr><td>Port of Singapore</td><td>Sea</td><td>4,120 km</td><td>7.6d</td><td>$1,180</td></tr>
+        <tr><td>Colombo Port</td><td>Sea</td><td>3,050 km</td><td>5.3d</td><td>$890</td></tr>
+        <tr><td>Port of Cape Town</td><td>Sea</td><td>7,480 km</td><td>11.3d</td><td>$1,640</td></tr>
+        <tr><td>Port of Rotterdam</td><td>Sea</td><td>9,960 km</td><td>14.2d</td><td>$2,290</td></tr></table>
+      <h3>Disruption impact</h3>
+      <div style="color:#4a5263">Suez Canal blockage: rerouted via the Cape of Good Hope. +9.2d and +$1,180 compared with a normal week.</div>
+      <div class="ft"><span>Generated by Supplychainer</span><span>supplychainer.onrender.com</span></div>
+    </div></div>
+  <div class="scrim"></div>
+  <div class="cap">Type where it starts.</div>
+  <div class="cap">Then where it’s going.</div>
+  <div class="cap">Test it against a disruption.</div>
+  <div class="cap">Fastest, best value, most reliable.</div>
+  <div class="cap">Typical, planned and worst case.</div>
+  <div class="cap">See what’s behind every wait.</div>
+  <div class="cap">Today’s news, checked along your route.</div>
+  <div class="cap">PDF report, spreadsheet or TMS file.</div>
+  <div class="cap">Watch the route you pick.</div>
+  <div class="cap">Switch on a threat. See who it hits.</div>
+  <div class="cap">Get the alert, and a new plan.</div>
+
+  <div id="ripple"></div>
+  <svg id="cursor" viewBox="0 0 40 40"><path d="M4 3 L4 31 L11.5 23.5 L17 36 L22.5 33.5 L17 21.5 L27 21.5 Z" fill="#fff" stroke="#0b1030" stroke-width="2" stroke-linejoin="round"/></svg>
+  <div class="vignette"></div>
+</div>
+
+<button id="big" aria-label="Play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+<div id="ctl">
+  <button id="pp" aria-label="Pause"><svg viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>
+  <span class="t" id="tNow">0:00</span>
+  <input id="seek" type="range" min="0" max="1000" value="0" aria-label="Seek">
+  <span class="t" id="tDur">0:00</span>
+  <button id="rp" aria-label="Replay"><svg viewBox="0 0 24 24"><path d="M12 5V2L7 6l5 4V7a6 6 0 1 1-6 6H4a8 8 0 1 0 8-8z"/></svg></button>
+  <button id="fs" aria-label="Full screen"><svg viewBox="0 0 24 24"><path d="M4 4h6v2H6v4H4zM14 4h6v6h-2V6h-4zM4 14h2v4h4v2H4zM18 14h2v6h-6v-2h4z"/></svg></button>
+</div>
+</div>
+
+<script>
+// Approximate coastlines [lon,lat] for a stylised equirectangular world map.
+window.LAND=[
+[[-168,66],[-162,70],[-156,71.5],[-140,70],[-128,70],[-115,68.5],[-100,68],[-95,72],[-85,70],[-80,66],[-86,63],[-94,59],[-93,56],[-85,55],[-82,52],[-79,54],[-77,59],[-78,62],[-72,62],[-65,60],[-62,57],[-56,53],[-56,50],[-60,47],[-66,45],[-70,43],[-70,41.5],[-74,40.5],[-76,38],[-76,35],[-78,34],[-81,31],[-80,27],[-80.5,25],[-82,26.5],[-83,29.5],[-85,30],[-89,30],[-90,29],[-94,29.5],[-97,27.5],[-97.5,24],[-97,21],[-95,18.5],[-91,18.5],[-90.5,21],[-87,21.5],[-88,16],[-84,15],[-83.5,11],[-81.5,9],[-79.5,9.3],[-77.5,8.5],[-78,7.5],[-80,7.5],[-83,8.3],[-86,11],[-88,13.3],[-92,14.5],[-95,16],[-97,15.8],[-101,17.5],[-105,19.5],[-105.5,22.5],[-109,25.5],[-112,29],[-114.5,31],[-112.5,27],[-110,23],[-112,24.5],[-114,27.5],[-115.5,29.5],[-117,32.5],[-118.5,34],[-120.5,34.5],[-122.5,37.5],[-124,40.5],[-124,46],[-124.5,48.5],[-123,49],[-127,51],[-130,54.5],[-133,57.5],[-137,58.5],[-140,59.8],[-146,60.5],[-150,59.5],[-152,58],[-156,56.5],[-162,55],[-158,58],[-162,59],[-165,61],[-165,63],[-161,64.5],[-166,65.5]],
+[[-80,63],[-73,62.5],[-64,65],[-68,70],[-78,72.5],[-90,73],[-86,70],[-80,70]],
+[[-120,71],[-105,73],[-90,76],[-80,78],[-70,80],[-62,82],[-90,82],[-110,78],[-122,75]],
+[[-73,78],[-68,80.5],[-55,82.3],[-30,83.5],[-20,82],[-18,77],[-21,72],[-22,70],[-30,68],[-40,65],[-43,60],[-48,61],[-52,64.5],[-54,68],[-56,72],[-60,76],[-66,77]],
+[[-77.5,8.5],[-75,11],[-72,12],[-68,10.5],[-62,10.5],[-60,8.5],[-57,6],[-52,5],[-50,1],[-48,-1],[-44,-2.5],[-39,-3.5],[-35,-5.5],[-35,-9],[-37.5,-12.5],[-39,-15],[-39.5,-19],[-41,-22],[-44,-23],[-48,-25.5],[-48.5,-28.5],[-51,-31],[-53,-34],[-55,-35],[-57.5,-36],[-57,-38.5],[-62,-39],[-65,-41],[-64,-43],[-67,-46],[-66,-48],[-69,-51],[-68.5,-53],[-71,-54],[-74,-52],[-75,-48],[-73.5,-44],[-73.5,-38],[-72,-33],[-71.5,-28],[-70.5,-23],[-70.2,-18.5],[-72,-17],[-76,-14],[-78,-10],[-80,-7],[-81,-4.5],[-80,-2],[-80,0.5],[-78.8,1.5],[-77.5,4],[-77.3,7]],
+[[-17,21],[-16,24],[-13,27.5],[-10,29.5],[-9.5,32],[-6.5,34],[-5.5,35.8],[-2,35.1],[1,36.5],[6,37],[10,37.2],[11,35],[10.5,33.5],[15,32.3],[19,30.3],[20,32],[23,32.7],[25,31.8],[29,31],[32,31.2],[34,31.3],[34.5,28],[33.5,27.5],[35.5,23.9],[37.3,21],[38.5,18],[39.6,15.5],[41.5,13.5],[43.3,12.5],[44,10.5],[46,10.7],[51,11.8],[51,10],[49,6.5],[46,2],[42,-1],[40,-3.5],[39,-6.5],[39.5,-10],[40.5,-15],[37,-18],[35.3,-22],[35.5,-24],[32.8,-26],[32.4,-29],[30,-31.3],[27,-33.6],[23,-34],[20,-34.8],[18.4,-34],[18,-32],[17,-29],[15,-26.5],[14.5,-22.5],[13,-20],[11.8,-17],[12.5,-13.5],[13.8,-10.5],[13,-8],[12.2,-6],[12,-4],[9.5,-2],[9.3,1],[9.7,3.5],[8.5,4.5],[6,4.3],[4.5,6.3],[2,6.3],[-1,5],[-3,5.1],[-7.5,4.4],[-9.5,5.5],[-11.5,7],[-13.3,8.5],[-15,11],[-16.8,12.5],[-17.2,14.7],[-16.5,16.5],[-16,19]],
+[[49.3,-12],[50.5,-15.5],[49.5,-17.5],[47,-24.8],[45,-25.3],[43.5,-22],[44.3,-16.5],[46.5,-15.5]],
+[[-5.6,36],[-6.3,36.8],[-7.5,37.2],[-9,37],[-8.8,38.8],[-9.5,39.5],[-8.8,42],[-9.3,43],[-7.5,43.7],[-3.5,43.5],[-1.5,43.4],[-1.2,46],[-2.3,47.2],[-4.7,48.3],[-1.5,48.7],[-1.4,49.7],[1.5,50],[2.5,51.1],[4,51.8],[5,53.3],[8.5,53.6],[8.7,55.5],[8.2,57],[10.5,57.7],[10.5,56.2],[12.5,55.6],[11,54],[14,54],[18.5,54.6],[21,55],[21.2,57],[23.5,58.2],[24,59.5],[28,59.7],[22.5,60],[21.5,61.5],[21.3,63],[25,65],[22,65.8],[18,62.5],[17.5,61],[18.8,59.5],[16.5,57],[14.3,55.6],[12.8,56.3],[11.5,58.5],[10,59],[8,58.1],[5.5,58.8],[5,61.5],[7,63],[10,64.5],[13,67.5],[16,69],[19,70],[24,71],[29,70.8],[33,69.5],[38,68.5],[41,67],[35,66.2],[38,64.5],[44,66.3],[44,68.5],[53,68.5],[59,69],[61,69.8],[67,69],[68,72.5],[72,72.8],[75,72],[80,73.5],[87,74.5],[97,76],[104,77.7],[112,75.5],[113,73.5],[127,73.5],[131,71],[140,72.5],[150,71.5],[160,70],[170,69.8],[180,69],[180,65],[178,64.5],[174,61.8],[170,60],[163,59.8],[162,57.5],[163,54.5],[160,52.5],[156.5,51],[156,57.5],[152,59],[143,59.3],[137,54],[140.5,52],[141,48.5],[138,46],[135,43.5],[131,42.7],[129.5,40.8],[128,38.5],[129.3,35.2],[126.5,34.5],[126.2,37.7],[124.8,39.7],[121.5,40.8],[122.3,39.2],[118,39.2],[119,37.5],[122.5,37],[119.2,34.8],[120.8,32],[121.9,30.9],[121.5,28.5],[119.5,25.5],[116.5,23],[113.5,22.2],[110.5,21],[109.5,21.6],[108,21.5],[106.5,20],[105.8,18.9],[107,16.8],[109,15],[109.3,12],[107,10.5],[105,8.6],[104.8,10.5],[103,11.3],[101,12.8],[100,13.5],[100,12],[99.2,9.5],[100.3,7],[101.5,6.8],[103.3,4.5],[104.2,1.4],[103.5,1.3],[101,2.8],[100.3,5.3],[98.5,8],[98.3,10],[98.6,13],[97.7,16.5],[96,16.8],[94.3,16],[94.5,18.5],[92.5,21.5],[91.8,22.5],[89,21.8],[86.8,21.3],[85,19.5],[82.3,17],[80.2,15.5],[80.3,13],[79.8,10.3],[78.2,8.9],[77.5,8],[76.5,8.8],[75.5,11.7],[74.5,14.5],[73.4,16.5],[72.8,19.2],[72.6,21.5],[70.2,20.8],[68.5,23.3],[67,24.8],[64,25.3],[61.5,25.1],[57.5,25.7],[56.3,27.1],[54.7,26.5],[51.6,27.8],[50.2,30.2],[48,30],[48.5,28.5],[49.6,26.9],[50.3,25],[51.5,24.5],[51.6,25.9],[52.5,24.2],[54.5,24.3],[56.3,26.3],[56.4,24.8],[58.8,23.5],[59.8,22.3],[58.5,20.4],[57,18.9],[55.3,17.3],[52.2,15.6],[49.5,14.6],[45,12.8],[43.4,12.7],[42.7,15.5],[42.2,17.5],[40.9,19.7],[39,22],[38.4,24],[36.6,26],[35.1,28.2],[34.6,29.5],[34.3,31.2],[34.9,32.8],[35.7,35.6],[36.2,36.6],[34.5,36.8],[32.5,36.1],[30.5,36.3],[28.3,36.7],[27.2,37.9],[26.3,39.3],[26.2,40.5],[28.9,41],[29.3,41.2],[31.5,41.2],[35,42],[38.5,40.9],[41.5,41.5],[41.7,42.7],[39.5,44],[37.5,44.7],[38.3,46.2],[35,45.6],[33.5,44.5],[32.5,45.4],[31,46.5],[30.2,45.4],[29.6,45],[28.6,44],[27.8,42.5],[28,41.3],[26.4,40.6],[24,40.7],[23.3,39.9],[22.7,40.4],[22.9,39.3],[23,37.7],[22,36.4],[21.3,37.5],[21.1,38.3],[20.2,39.6],[19.4,41.8],[18.5,42.4],[16,43.5],[14.5,45.2],[13.7,45.6],[12.3,45.3],[12.5,44],[14,42.5],[16,41.4],[18.5,40.2],[17,39],[16.5,38.4],[15.7,40.1],[14.3,40.4],[12.3,41.7],[10.5,42.9],[10.2,44],[8.8,44.4],[7.4,43.7],[6,43.1],[4.7,43.4],[3.2,43.2],[3.1,41.9],[1,41],[0,39.7],[-0.3,38.5],[-0.8,37.6],[-2.1,36.7],[-4.4,36.7]],
+[[-5.7,50],[-3,50.6],[1.4,51.2],[1.7,52.7],[0,53.5],[-0.5,54.5],[-2,55.9],[-1.8,57.6],[-3.3,58.6],[-5,58.6],[-6.2,56.8],[-5.5,55.3],[-3.2,54.5],[-3,53.4],[-4.5,52.8],[-5.2,51.7],[-3.5,51.4]],
+[[-6,52.2],[-6,53.9],[-5.9,55.2],[-8,55.2],[-10,54],[-10,52],[-8,51.6]],
+[[-22.5,64],[-21.5,65.5],[-18,66.2],[-14.5,65.8],[-13.6,65],[-18,63.4],[-22,63.8]],
+[[130.9,34],[133,35.5],[136,36],[137,37],[139.5,38.5],[140,40.5],[141.5,41.3],[142,39.5],[141,37],[140.8,35.7],[139.8,35],[138.5,34.7],[136.8,34.5],[135,33.5],[132.5,34.3]],
+[[140,41.5],[141.5,45.4],[145.5,43.3],[143.3,42],[141,42.5]],
+[[129.7,33.2],[131.9,33.9],[131.3,31.3],[130.2,31.2]],
+[[120.1,23],[121.5,25.3],[121.9,24.5],[120.9,21.9]],
+[[108.7,19.2],[110.5,20.1],[111,19.6],[109.5,18.2]],
+[[79.8,6.2],[79.9,9.6],[81.3,8.5],[81.8,7.2],[81,6]],
+[[95.3,5.6],[98,4.2],[100.5,2],[103.8,-1],[106,-3.2],[105.8,-5.8],[104,-5.5],[102,-4],[100,-1],[98.6,1.8]],
+[[105.2,-6.8],[108,-6.2],[111,-6.6],[114.4,-7.7],[112,-8.4],[108.5,-7.8],[106,-7.3]],
+[[109,1.5],[110,1.8],[113,3.2],[115.5,5.3],[117,7],[119.2,5.3],[118,4.3],[118.5,1],[117.5,0],[116.5,-2.3],[116,-3.9],[114.5,-4],[111.8,-3.5],[110.2,-2.9],[109.5,-0.2]],
+[[119.5,0.8],[120.5,1.2],[124.9,1.5],[121,-0.8],[123.3,-0.9],[121.2,-2],[122.5,-5],[120.5,-5.6],[119.4,-3.5],[118.8,-2.5]],
+[[131,-1],[134,-0.9],[138,-1.7],[141,-2.6],[145.5,-4.8],[147.8,-6],[147.5,-8.1],[150.5,-10.5],[146,-8.2],[143.5,-9],[141,-9.1],[138.5,-8.4],[137.8,-5.4],[135,-4.4],[132,-2.9]],
+[[120.6,18.5],[122.3,18.4],[122,16],[121.6,14],[124,12.9],[123,13.5],[120.5,14.4],[119.8,16.3]],
+[[122,7],[125.5,9.8],[126.6,7],[125.4,5.6],[123.5,7.8]],
+[[113.4,-22],[114.2,-26],[115,-30],[115.7,-33.5],[117.9,-35.1],[123.5,-33.9],[126,-32.3],[131,-31.5],[134.2,-32.8],[135.8,-34.8],[137.8,-32.8],[138.5,-35.6],[140,-37.9],[143.5,-38.8],[146.3,-39.1],[150,-37.5],[151.3,-33.8],[153.2,-30.5],[153,-25.2],[150.8,-22.6],[148.8,-20.3],[146.3,-19],[145.4,-15],[143.5,-14],[142.5,-10.8],[141.6,-13],[141.5,-16.5],[139.2,-17.5],[136,-15.5],[136.9,-12.2],[132.7,-11.5],[130.5,-12.5],[129.5,-15],[127,-13.8],[125,-15.5],[122.3,-17.5],[121,-19.6],[117,-20.6]],
+[[144.6,-40.7],[148.3,-40.9],[148,-43.2],[146,-43.6]],
+[[172.7,-34.5],[174.5,-36],[176,-37.6],[178.5,-37.7],[177,-39.3],[176,-41.3],[174.8,-41.3],[175.2,-40],[173.8,-39.2],[174.6,-37.5]],
+[[172.6,-40.5],[174.2,-41.7],[173,-43.8],[171,-45.9],[169,-46.6],[166.5,-46],[168.3,-44],[171.3,-42]],
+[[142,46],[143.5,49],[143,53],[142.5,54.3],[142,51],[141.8,48]],
+[[52,71.5],[57,70.6],[59,74],[68,76.5],[62,76.2],[55,73]],
+[[11,78.5],[17,76.6],[21,78.2],[27,80],[18,80.5],[11,79.8]],
+[[-85,21.8],[-82,23.2],[-77,22.3],[-74.2,20.2],[-77.5,19.8],[-80,21.7]],
+[[-74.4,18.4],[-72.8,19.9],[-69,19.7],[-68.4,18.5],[-71.5,17.6]],
+[[-180,-78],[-120,-74],[-60,-64],[-55,-66],[-60,-75],[0,-70],[60,-67],[120,-66.5],[170,-72],[180,-78],[180,-90],[-180,-90]]
+];
+
+</script>
+<script>
+(function(){
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const NS='http://www.w3.org/2000/svg';
+const stage=$('#stage'),cam=$('#cam');
+function fit(){const k=Math.min(innerWidth/1920,innerHeight/1080);stage.style.transform=`translate(-50%,-50%) scale(${k})`;}
+addEventListener('resize',fit);fit();
+
+/* ---------- lucide-style icons ---------- */
+const IC={
+ route:'<circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/>',
+ bellring:'<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/><path d="M4 2C2.8 3.7 2 5.7 2 8"/><path d="M22 8c0-2.3-.8-4.3-2-6"/>',
+ history:'<path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/>',
+ factory:'<path d="M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8l-7 5V8l-7 5V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M17 18h1M12 18h1M7 18h1"/>',
+ plug:'<path d="M12 22v-5M9 8V2M15 8V2M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z"/>',
+ sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>',
+ sparkles:'<path d="M9.9 15.5A2 2 0 0 0 8.5 14.1l-6.1-1.6a.5.5 0 0 1 0-1l6.1-1.6A2 2 0 0 0 9.9 8.5l1.6-6.1a.5.5 0 0 1 1 0l1.6 6.1a2 2 0 0 0 1.4 1.4l6.1 1.6a.5.5 0 0 1 0 1l-6.1 1.6a2 2 0 0 0-1.4 1.4l-1.6 6.1a.5.5 0 0 1-1 0z"/>',
+ updown:'<path d="m21 16-4 4-4-4M17 20V4M3 8l4-4 4 4M7 4v16"/>',
+ zap:'<path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/>',
+ sliders:'<path d="M21 4h-7M10 4H3M21 12h-9M8 12H3M21 20h-5M12 20H3M14 2v4M8 10v4M16 18v4"/>',
+ waypoints:'<circle cx="12" cy="4.5" r="2.5"/><path d="m10.2 6.3-3.9 3.9"/><circle cx="4.5" cy="12" r="2.5"/><path d="M7 12h10"/><circle cx="19.5" cy="12" r="2.5"/><path d="m13.8 17.7 3.9-3.9"/><circle cx="12" cy="19.5" r="2.5"/>',
+ alert:'<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4M12 17h.01"/>',
+ globe:'<circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20M2 12h20"/>',
+ anchor:'<path d="M12 22V8M5 12H2a10 10 0 0 0 20 0h-3"/><circle cx="12" cy="5" r="3"/>',
+ plane:'<path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/>',
+ train:'<path d="M8 3.1V7a4 4 0 0 0 8 0V3.1M9 15l-1-1M15 15l1-1"/><path d="M9 19c-2.8 0-5-2.2-5-5v-4a8 8 0 0 1 16 0v4c0 2.8-2.2 5-5 5Z"/><path d="m8 19-2 3M16 19l2 3"/>',
+ ship:'<path d="M12 10.2V14M12 2v3M19 13V7a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v6"/><path d="M19.4 19.2A6 6 0 0 1 12 14a6 6 0 0 1-7.4 5.2L2 13l10-3 10 3z"/><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1s1.2 1 2.5 1c2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>',
+ truck:'<path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2M15 18H9M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.62l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/>',
+ shield:'<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="M12 8v4M12 16h.01"/>',
+ corner:'<path d="m15 10 5 5-5 5"/><path d="M4 4v7a4 4 0 0 0 4 4h12"/>',
+ bell:'<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>',
+ belloff:'<path d="M8.7 3A6 6 0 0 1 18 8a21.3 21.3 0 0 0 .6 5M17 17H3s3-2 3-9a4.67 4.67 0 0 1 .3-1.7M10.3 21a1.94 1.94 0 0 0 3.4 0M2 2l20 20"/>',
+ file:'<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4M16 13H8M16 17H8"/>',
+ braces:'<path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5c0 1.1.9 2 2 2h1M16 21h1a2 2 0 0 0 2-2v-5c0-1.1.9-2 2-2a2 2 0 0 1-2-2V5a2 2 0 0 0-2-2h-1"/>',
+ x:'<path d="M18 6 6 18M6 6l12 12"/>',
+ radar:'<path d="M19.07 4.93A10 10 0 0 0 6.99 3.34"/><path d="M4 6h.01"/><path d="M2.29 9.62A10 10 0 1 0 21.31 8.35"/><path d="M16.24 7.76A6 6 0 1 0 8.23 16.67"/><path d="M12 18h.01"/><path d="M17.99 11.66A6 6 0 0 1 15.77 16.67"/><circle cx="12" cy="12" r="2"/><path d="m13.41 10.59 5.66-5.66"/>',
+ radio:'<path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"/><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5"/><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5"/><path d="M19.1 4.9C23 8.8 23 15.1 19.1 19"/>',
+ siren:'<path d="M7 18v-6a5 5 0 1 1 10 0v6"/><path d="M5 21a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2z"/><path d="M21 12h1M18.5 4.5 18 5M2 12h1M12 2v1M4.93 4.93l.71.71M12 12v6"/>',
+ external:'<path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>',
+ download:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>',
+ check:'<path d="M18 6 7 17l-5-5M22 10l-7.5 7.5L13 16"/>',
+ shieldoff:'<path d="m2 2 20 20M5 5a1 1 0 0 0-1 1v7c0 5 3.5 7.5 7.67 8.94a1 1 0 0 0 .67.01c2.35-.82 4.48-1.97 5.86-3.71M9.3 3.3a1.17 1.17 0 0 1 1.46-.02C12.49 4.81 15 6 17 6a1 1 0 0 1 1 1v7.34"/>'
+};
+$$('i[data-i]').forEach(el=>{const s=el.dataset.s||16,c=el.dataset.c||'currentColor',w=el.dataset.w||2;
+  el.outerHTML=`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" style="flex:none">${IC[el.dataset.i]}</svg>`;});
+$('#word').innerHTML=[...'Supplychainer'].map(c=>`<span aria-hidden="true">${c}</span>`).join('');
+
+/* ---------- band bars (same maths as BandBar, maxEta = max p95 × 1.05) ---------- */
+const MAXETA=42.6*1.05;
+$$('.band').forEach(b=>{const [p50,p85,p95]=b.dataset.b.split(',').map(Number),pc=v=>Math.min(100,v/MAXETA*100);
+  b.innerHTML=`<div class="track"></div><div class="range" style="left:${pc(p50)}%;width:${pc(p95)-pc(p50)}%"></div><div class="mk" style="left:${pc(p85)}%"></div>`;});
+
+/* ---------- state driven by the timeline ---------- */
+const G={rot:-118,nodes:0,arcs:0},CAM={fx:960,fy:540,s:1},C={x:1650,y:980,o:0,press:1},RP={s:.2,o:0},NUM={v:0},
+  S={tab:0,rscroll:0,pscroll:0,fFocus:0,tFocus:0,fTyped:0,tTyped:0,fVal:0,tVal:0,scnFocus:0,scnVal:0,col:0,scroll:0,live:0,watch:0},
+  MAP={cx:2200,cy:700,w:3300},R={sel:0,alt:0,end:0,mk:0,stops:0};
+
+/* ---------- globe ---------- */
+const D=Math.PI/180,GR=300,TI=.42,ct=Math.cos(TI),st=Math.sin(TI);
+const vec=(lat,lon)=>{const la=lat*D,lo=lon*D;return[Math.cos(la)*Math.sin(lo),-Math.sin(la),Math.cos(la)*Math.cos(lo)];};
+function xf(v,r){const a=G.rot*D,ca=Math.cos(a),sa=Math.sin(a),x=v[0]*r,y=v[1]*r,z=v[2]*r,x1=x*ca+z*sa,z1=z*ca-x*sa;return[x1,y*ct+z1*st,-y*st+z1*ct];}
+const HUB={sha:[31.2,121.5],sin:[1.3,103.8],mum:[18.95,72.95],dxb:[25.3,55.3],rtm:[51.9,4.5],ham:[53.5,10],nyc:[40.7,-74],lax:[33.7,-118.3],san:[-23.9,-46.3],dur:[-29.9,31],col:[6.9,79.8],bus:[35.1,129],tyo:[35.6,139.8],pan:[9,-79.5],lag:[6.4,3.4],syd:[-33.9,151.2],sal:[16.9,54],hkg:[22.3,114.2],alg:[36.1,-5.4],hou:[29.7,-95],jed:[21.5,39.2],chi:[41.9,-87.6]};
+const gp=Object.values(HUB).map(p=>({v:vec(p[0],p[1]),hub:1}));let seed=7;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
+while(gp.length<170){gp.push({v:vec(-42+rnd()*104,-180+rnd()*360),hub:0});}
+const gn=$('#gnodes');gp.forEach(p=>{p.el=document.createElementNS(NS,'circle');gn.appendChild(p.el);});
+const PAIRS=[['sha','rtm'],['mum','ham'],['sha','lax'],['sin','ham'],['dxb','nyc'],['bus','sin'],['san','alg'],['dur','col'],['hkg','syd'],['hou','ham'],['lag','nyc'],['sal','sin'],['tyo','pan'],['chi','rtm']];
+const ga=$('#arcs');const garcs=PAIRS.map(([a,b])=>{const e=document.createElementNS(NS,'path');ga.appendChild(e);const A=vec(...HUB[a]),B=vec(...HUB[b]);return{e,A,B,om:Math.acos(Math.max(-1,Math.min(1,A[0]*B[0]+A[1]*B[1]+A[2]*B[2])))};});
+const MER=[],PAR=[];for(let lo=-180;lo<180;lo+=20){const l=[];for(let la=-88;la<=88;la+=4)l.push(vec(la,lo));MER.push(l);}
+for(let la=-60;la<=75;la+=15){const l=[];for(let lo=-180;lo<=180;lo+=4)l.push(vec(la,lo));PAR.push(l);}
+const lineD=list=>{let d='',pen=false;for(const v of list){const p=xf(v,GR);if(p[2]>=0){d+=(pen?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1);pen=true;}else pen=false;}return d;};
+const globeWrap=$('#globeWrap');
+function drawGlobe(){
+  if(+getComputedStyle(globeWrap).opacity<.01)return;
+  $('#grat').setAttribute('d',MER.concat(PAR).map(lineD).join(''));
+  const n=Math.floor(G.nodes*gp.length);
+  gp.forEach((p,i)=>{const q=xf(p.v,GR),vis=i<n&&q[2]>0;p.el.setAttribute('cx',q[0].toFixed(1));p.el.setAttribute('cy',q[1].toFixed(1));p.el.setAttribute('r',vis?(p.hub?3.4:1.8):0);p.el.setAttribute('opacity',vis?(.3+.7*q[2]/GR).toFixed(2):0);});
+  garcs.forEach((a,i)=>{const pr=Math.max(0,Math.min(1,(G.arcs-i/garcs.length*.6)/.4));let d='',pen=false;
+    if(pr>0){const N=56,so=Math.sin(a.om)||1e-6,last=Math.round(N*pr);for(let k=0;k<=last;k++){const t=k/N,w1=Math.sin((1-t)*a.om)/so,w2=Math.sin(t*a.om)/so;
+      const q=xf([a.A[0]*w1+a.B[0]*w2,a.A[1]*w1+a.B[1]*w2,a.A[2]*w1+a.B[2]*w2],GR*(1+.24*Math.sin(Math.PI*t)*Math.min(1,a.om)));
+      if(q[2]>=0||Math.hypot(q[0],q[1])>GR){d+=(pen?'L':'M')+q[0].toFixed(1)+' '+q[1].toFixed(1);pen=true;}else pen=false;}}
+    a.e.setAttribute('d',d);});
+}
+
+/* ---------- map (equirectangular, 10 units per degree) ---------- */
+const X=lon=>(lon+180)*10,Y=lat=>(90-lat)*10;
+const mk=(tag,attrs,parent)=>{const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);parent&&parent.appendChild(e);return e;};
+mk('path',{class:'land',d:window.LAND.map(p=>'M'+p.map(([lo,la])=>X(lo).toFixed(0)+' '+Y(la).toFixed(0)).join('L')+'Z').join('')},$('#landG'));
+const PORTS=[[31.2,121.5],[22.3,114.2],[22.5,113.9],[35.1,129],[35.6,139.8],[34.7,135.2],[1.3,103.8],[3,101.4],[13.1,100.9],[10.8,106.7],[21,105.8],[14.6,121],[-6.1,106.8],[6.9,79.8],[18.95,72.95],[22.8,69.7],[13.1,80.3],[25.3,55.3],[26.6,56.3],[24.5,54.4],[21.5,39.2],[29.9,32.5],[31.2,29.9],[12.6,43.3],[-4,39.7],[-29.9,31],[-33.9,18.4],[6.4,3.4],[5.3,-4],[14.7,-17.4],[33.6,-7.6],[36.1,-5.4],[41.4,2.2],[43.3,5.4],[44.4,8.9],[40.8,14.3],[37.9,23.6],[41,29],[45,37.5],[51.9,4.5],[51.2,4.4],[53.5,10],[53.1,8.8],[51.5,0],[54.4,18.7],[59.9,30.3],[55.7,37.6],[52.5,13.4],[50.1,8.7],[48.9,2.4],[40.4,-3.7],[45.5,9.2],[48.1,11.6],[52.3,4.8],[34.3,108.9],[43.8,87.6],[44.2,80.3],[51.2,71.4],[39.9,116.4],[30.6,114.3],[29.6,106.5],[40.7,-74],[33.7,-118.3],[37.8,-122.4],[47.6,-122.3],[29.7,-95],[25.8,-80.2],[41.9,-87.6],[49.3,-123.1],[43.7,-79.4],[19.4,-99.1],[9,-79.5],[-23.9,-46.3],[-34.6,-58.4],[-12,-77],[-33,-71.6],[10.5,-66.9],[-33.9,151.2],[-37.8,144.9],[-27.5,153],[-31.9,115.9],[-36.8,174.8],[30,31.2],[33.9,35.5],[24.9,67],[23.8,90.4],[16.8,96.2],[37.5,127],[25,121.5],[64.1,-21.9],[-1.3,36.8],[9,38.7],[-26.2,28],[15.5,32.5]];
+const hubEls=PORTS.map(([la,lo])=>mk('circle',{cx:X(lo),cy:Y(la),fill:'#aab3c2','fill-opacity':.4},$('#hubG')));
+// faint network: each hub to its two nearest neighbours
+PORTS.forEach((a,i)=>{const d=PORTS.map((b,j)=>[j,(a[0]-b[0])**2+(a[1]-b[1])**2]).filter(x=>x[0]!==i).sort((p,q)=>p[1]-q[1]).slice(0,2);
+  d.forEach(([j])=>{if(j<i)return;const b=PORTS[j];mk('line',{class:'net',x1:X(a[1]),y1:Y(a[0]),x2:X(b[1]),y2:Y(b[0]),stroke:i%3?'#1597d8':'#e59a12','stroke-opacity':.2},$('#netG'));});});
+// great-circle helper (from lib.js arc())
+function arc(from,to,n=24){const r=d=>d*Math.PI/180,g=v=>v*180/Math.PI,[a1,o1,a2,o2]=[r(from[0]),r(from[1]),r(to[0]),r(to[1])];
+  const d=2*Math.asin(Math.sqrt(Math.sin((a2-a1)/2)**2+Math.cos(a1)*Math.cos(a2)*Math.sin((o2-o1)/2)**2));if(d<.02)return[from,to];const out=[];
+  for(let i=0;i<=n;i++){const f=i/n,A=Math.sin((1-f)*d)/Math.sin(d),B=Math.sin(f*d)/Math.sin(d);const x=A*Math.cos(a1)*Math.cos(o1)+B*Math.cos(a2)*Math.cos(o2),y=A*Math.cos(a1)*Math.sin(o1)+B*Math.cos(a2)*Math.sin(o2),z=A*Math.sin(a1)+B*Math.sin(a2);out.push([g(Math.atan2(z,Math.sqrt(x*x+y*y))),g(Math.atan2(y,x))]);}return out;}
+const chaikin=(pts,it=3)=>{for(let k=0;k<it;k++){const o=[pts[0]];for(let i=0;i<pts.length-1;i++){const[a,b]=[pts[i],pts[i+1]];o.push([a[0]*.75+b[0]*.25,a[1]*.75+b[1]*.25],[a[0]*.25+b[0]*.75,a[1]*.25+b[1]*.75]);}o.push(pts[pts.length-1]);pts=o;}return pts;};
+const toXY=pts=>pts.map(([la,lo])=>[X(lo),Y(la)]);
+const dOf=pts=>'M'+pts.map(p=>p[0].toFixed(1)+' '+p[1].toFixed(1)).join('L');
+// Best value, rerouted around Africa (Suez blocked)
+const SEA=[[31.2,121.5],[28,123.5],[22,118.5],[15,112.5],[8,108.5],[3,105.2],[1.3,103.8],[3,100.6],[6,95.5],[6,82],[6.9,79.8],[-5,70],[-20,56],[-30,40],[-36,26],[-34.2,18.3],[-25,10],[-8,3],[2,-5],[10,-19],[22,-19],[33,-12],[43,-10.5],[48.5,-6],[50.3,-1],[51.3,2.5],[51.95,4.1]];
+const seaPts=toXY(chaikin(SEA));const splitAt=Math.floor(seaPts.length*.915);
+const airPts=toXY(arc([31.1,121.8],[52.3,4.8],40).concat([[51.9,4.5]]));
+const railPts=toXY(chaikin([[31.2,121.5],[34.3,108.9],[43.8,87.6],[44.2,80.3],[51.2,71.4],[53.2,50.2],[55.75,37.6],[53.9,27.6],[52,23.5],[52.5,13.4],[51.4,6.8],[51.9,4.5]],2));
+mk('path',{d:dOf(airPts),class:'net',stroke:'#e59a12','stroke-width':2.4,'stroke-dasharray':'5 8',fill:'none'},$('#altG'));
+mk('path',{d:dOf(railPts),class:'net',stroke:'#10a37f','stroke-width':2.4,'stroke-dasharray':'5 8',fill:'none'},$('#altG'));
+const rt=$('#routeG');
+const rHalo=mk('path',{class:'net',stroke:'#161a23','stroke-width':8,'stroke-linecap':'round','stroke-linejoin':'round',fill:'none'},rt);
+const rMain=mk('path',{class:'net',stroke:'#1597d8','stroke-width':4,'stroke-linecap':'round','stroke-linejoin':'round',fill:'none'},rt);
+const rEnd=mk('path',{class:'net',stroke:'#1597d8','stroke-width':4,'stroke-linecap':'round','stroke-linejoin':'round',fill:'none'},rt);
+const rFlow=mk('path',{class:'net flow',stroke:'#fff','stroke-width':1.5,'stroke-opacity':.7,fill:'none'},rt);
+// markers drawn in screen px, scaled by u each frame
+const MK=[];
+function marker(lat,lon,html,kind){const g=mk('g',{},$('#mkG'));g.innerHTML=html;MK.push({g,x:X(lon),y:Y(lat),kind});return g;}
+const CHOKES=[[30,32.55],[12.6,43.4],[26.6,56.4],[2.5,101.2],[9.1,-79.7],[-34.4,18.5],[24,119.5]];
+CHOKES.forEach(([la,lo])=>marker(la,lo,'<circle r="4" fill="#161a23" stroke="#e59a12" stroke-width="2"/>','choke'));
+const pulse=(c)=>`<circle r="7" fill="${c}" stroke="#161a23" stroke-width="2"/><circle r="7" fill="none" stroke="${c}" stroke-width="2"><animate attributeName="r" values="7;22" dur="1.6s" repeatCount="indefinite"/><animate attributeName="stroke-opacity" values=".8;0" dur="1.6s" repeatCount="indefinite"/></circle>`;
+const suezMk=marker(30,32.55,pulse('#ff6369'),'suez');
+const rtmMk=marker(51.95,4.1,pulse('#ff6369'),'rtmlive');
+const stopEls=[[1.3,103.8],[6.9,79.8],[-33.9,18.4]].map(([la,lo])=>marker(la,lo,'<circle r="4.5" fill="#161a23" stroke="#eef0f5" stroke-width="2.5"/>','stop'));
+const tip=(txt)=>{const w=txt.length*7.1+20;return `<g transform="translate(0,-16)"><rect x="${-w/2}" y="-26" width="${w}" height="26" rx="8" fill="#161a23" stroke="#262c38"/><text class="mtip" x="0" y="-8.5" text-anchor="middle">${txt}</text></g>`;};
+const orgMk=marker(31.2,121.5,'<circle r="7" fill="#6f8bff" stroke="#161a23" stroke-width="2.5"/>'+tip('Port of Shanghai'),'end');
+const dstMk=marker(51.95,4.1,'<circle r="7" fill="#38b2f0" stroke="#161a23" stroke-width="2.5"/>'+tip('Port of Rotterdam'),'end');
+const mapSvg=$('#map');
+function partial(pts,f){const n=Math.max(0,Math.min(pts.length,Math.round(pts.length*f)));return n<2?'':dOf(pts.slice(0,n));}
+function drawMap(){
+  const W=mapSvg.clientWidth||1,H=mapSvg.clientHeight||1,u=MAP.w/W,h=MAP.w*H/W;
+  mapSvg.setAttribute('viewBox',`${MAP.cx-MAP.w/2} ${MAP.cy-h/2} ${MAP.w} ${h}`);
+  hubEls.forEach(e=>e.setAttribute('r',1.9*u));
+  const a=partial(seaPts,R.sel),main=R.sel>=.915?dOf(seaPts.slice(0,splitAt+1)):a,end=R.sel>.915?partial(seaPts.slice(splitAt),(R.sel-.915)/.085):'';
+  rHalo.setAttribute('d',a);rMain.setAttribute('d',main);rEnd.setAttribute('d',end);rFlow.setAttribute('d',a);
+  rEnd.setAttribute('stroke',S.live>.5?'#ff6369':'#1597d8');
+  $('#altG').style.opacity=R.alt*.6;
+  MK.forEach(m=>{m.g.setAttribute('transform',`translate(${m.x} ${m.y}) scale(${u})`);});
+  suezMk.style.opacity=R.mk;rtmMk.style.opacity=S.live;
+  stopEls.forEach(e=>e.style.opacity=R.stops);orgMk.style.opacity=R.stops;dstMk.style.opacity=R.stops;
+}
+
+/* ---------- apply UI state ---------- */
+const planner=$('#planner'),sideL=$('#sideL');
+const inF=$('#inFrom'),inT=$('#inTo');
+function setInput(el,focus,typed,val,full){
+  el.classList.toggle('focus',focus>.5);
+  const txt=val>.5?full:(full.slice(0,Math.round(typed)));
+  el.querySelector('.txt').textContent=txt;el.querySelector('.ph').style.display=txt?'none':'';
+  el.querySelector('.caret').style.opacity=focus>.5?1:0;
+}
+const sideR=$('#sideR'),pageA=$('#viewAlerts');
+function layout(){
+  planner.style.gridTemplateColumns=`370px 1fr ${S.col.toFixed(1)}px`;
+  sideL.scrollTop=S.scroll;sideR.scrollTop=S.rscroll;pageA.scrollTop=S.pscroll;
+  $('#navPlan').classList.toggle('active',S.tab<.5);$('#navAlerts').classList.toggle('active',S.tab>=.5);
+}
+const numEl=$('#num'),cur=$('#cursor'),rip=$('#ripple');
+function render(){
+  drawGlobe();layout();drawMap();
+  cam.style.transform=`translate(${960-CAM.fx*CAM.s}px,${540-CAM.fy*CAM.s}px) scale(${CAM.s})`;
+  setInput(inF,S.fFocus,S.fTyped,S.fVal,S.fVal>.5?'Port of Shanghai':'Shang');
+  setInput(inT,S.tFocus,S.tTyped,S.tVal,S.tVal>.5?'Port of Rotterdam':'Rotter');
+  const sel=$('#scnSel');sel.classList.toggle('focus',S.scnFocus>.5);sel.classList.toggle('crit',S.scnVal>.5&&S.scnFocus<.5);
+  $('#scnTxt').textContent=S.scnVal>.5?'Suez Canal blockage':'None, a normal week';
+  $('#watchBtn').classList.toggle('on',S.watch>.5);$('#watchNote').style.display=S.watch>.5?'':'none';
+  numEl.textContent=Math.round(NUM.v).toLocaleString('en-US');
+  const sx=960+(C.x-CAM.fx)*CAM.s,sy=540+(C.y-CAM.fy)*CAM.s;
+  cur.style.transform=`translate(${sx-4}px,${sy-3}px) scale(${C.press})`;cur.style.opacity=C.o;
+  rip.style.transform=`translate(${sx}px,${sy}px) scale(${RP.s})`;rip.style.opacity=RP.o;
+}
+
+/* ---------- measure real element positions (world coords) ---------- */
+function pos(el,ax=.5,ay=.5){const sr=stage.getBoundingClientRect(),k=sr.width/1920,r=el.getBoundingClientRect();
+  return{x:(r.left-sr.left)/k+r.width/k*ax,y:(r.top-sr.top)/k+r.height/k*ay,w:r.width/k,h:r.height/k};}
+function measure(){
+  const win=$('#win');gsap.set(win,{opacity:1,y:0,rotationX:0,scale:1.1,transformPerspective:2000});
+  Object.assign(CAM,{fx:960,fy:540,s:1});render();
+  const P={from:pos(inF),to:pos(inT),sgF:pos($('#sgFrom .it')),sgT:pos($('#sgTo .it')),scn:pos($('#scnSel')),
+    scnOpt:pos($$('#sgScn .it')[1]),btn:pos($('#findBtn'))};
+  S.col=450;S.scroll=0;layout();
+  const maxS=sideL.scrollHeight-sideL.clientHeight;const want=$('#optTitle').offsetTop-sideL.offsetTop-10;
+  P.scrollTo=Math.max(0,Math.min(maxS,want));S.scroll=P.scrollTo;render();
+  Object.assign(P,{op2:pos($('#op2')),opts:pos($('#opts')),band:pos($('#heroBand')),impact:pos($('#impact')),hero:pos($('#hero')),
+    watch:pos($('#watchBtn')),toast:pos($('#toast')),open:pos($('#openRoute')),map:pos($('#mapWrap')),live:pos($('#livePill'))});
+  const top=el=>el.getBoundingClientRect().top;
+  const rs=el=>Math.max(0,Math.min(sideR.scrollHeight-sideR.clientHeight,sideR.scrollTop+(top(el)-top(sideR))/((stage.getBoundingClientRect().width/1920)*1.05)-16));
+  P.rsDrv=rs($('#drvCard'));P.rsNews=rs($('#newsCard'));
+  S.rscroll=P.rsDrv;render();P.drv=pos($('#drvCard'));
+  S.rscroll=P.rsNews;render();P.newsBtn=pos($('#newsBtn'));P.newsList=pos($('#newsList'));
+  S.rscroll=0;render();P.pdf=pos($('#pdfBtn'));P.watch=pos($('#watchBtn'));
+  P.navA=pos($('#navAlerts'));P.pdfEl=pos($('#pdf'));P.golive=pos($('#gl1'));P.scRtm=pos($('#scRtm'));
+  const ps=Math.max(0,pageA.scrollHeight-pageA.clientHeight);P.ps=ps;S.pscroll=ps;render();P.alertItem=pos($('#alertItem'));P.alertsPanel=pos($('#alertsPanel'));
+  S.col=0;S.scroll=0;S.rscroll=0;S.pscroll=0;render();
+  return P;
+}
+
+/* ---------- build the timeline ---------- */
+function build(){
+const P=measure();
+const tl=gsap.timeline({paused:true,onUpdate:()=>{render();syncUI();},onComplete:()=>{setIcon(false);big.classList.add('show');big.setAttribute('aria-label','Replay');showCtl();}});
+const camTo=(t,fx,fy,s,dur,ease='power3.inOut')=>tl.to(CAM,{fx,fy,s,duration:dur,ease},t);
+const move=(t,p,dur=.8,ease='power2.inOut')=>tl.to(C,{x:p.x,y:p.y,duration:dur,ease},t);
+const click=t=>{tl.to(C,{press:.82,duration:.08,ease:'power2.out'},t).to(C,{press:1,duration:.18,ease:'power2.out'},t+.08);
+  tl.fromTo(RP,{s:.2,o:.8},{s:1,o:0,duration:.6,ease:'power2.out',immediateRender:false},t);};
+const set=(t,o)=>tl.set(S,o,t);
+const caps=$$('.cap');const cap=(i,a,b)=>{tl.to(caps[i],{opacity:1,y:0,duration:.5,ease:'power3.out'},a);tl.to(caps[i],{opacity:0,y:-16,duration:.35,ease:'power2.in'},b);};
+
+gsap.set('#globeWrap',{opacity:0,scale:.6});
+gsap.set('#tmark',{opacity:0,scale:.6,y:30});
+gsap.set('#word span',{opacity:0,y:70,filter:'blur(14px)'});
+gsap.set('#tag',{opacity:0,y:24});
+gsap.set('#stat',{opacity:0});gsap.set(['#num','#stat p'],{opacity:0,y:40});
+gsap.set('#win',{opacity:0,y:260,rotationX:32,scale:.78,transformPerspective:2000,transformOrigin:'50% 0%'});
+gsap.set(['#opts .section-title','.option'],{opacity:0,x:-30});
+gsap.set('#rin',{opacity:0,x:40});
+gsap.set(['#banner','#toast','#livePill','#navCount','#scRtm .lring','#liveChip','#liveCallout','#endBtn','#markAll'],{opacity:0});
+gsap.set('#newsList .intel-item',{opacity:0,y:14});gsap.set('#viewAlerts',{opacity:0});
+gsap.set('#toast',{x:40});gsap.set('#navCount',{scale:.3});
+gsap.set('.cap',{opacity:0,y:28});
+gsap.set('#outro',{opacity:0});gsap.set('#outro .o-el',{opacity:0,y:34});
+
+// ambient
+tl.to(G,{rot:-8,duration:57,ease:'none'},0);
+tl.to('.o1',{x:260,y:140,duration:57,ease:'sine.inOut'},0);
+tl.to('.o2',{x:-240,y:-120,duration:57,ease:'sine.inOut'},0);
+tl.to('.o3',{x:-420,y:-260,duration:57,ease:'sine.inOut'},0);
+
+// 1 · opening
+tl.to('#globeWrap',{opacity:1,scale:1,duration:2,ease:'power3.out'},0);
+tl.to(G,{nodes:.3,duration:2.2,ease:'power2.out'},.2);
+tl.to(G,{arcs:1,duration:3,ease:'power1.inOut'},.4);
+tl.to('#globeWrap',{opacity:.35,duration:.8},1);
+tl.to('#tmark',{opacity:1,scale:1,y:0,duration:.8,ease:'back.out(1.8)'},.9);
+tl.to('#word span',{opacity:1,y:0,filter:'blur(0px)',duration:.9,stagger:.045,ease:'power3.out'},1.1);
+tl.to('#tag',{opacity:1,y:0,duration:.8,ease:'power3.out'},1.9);
+tl.to('#title',{opacity:0,y:-50,filter:'blur(10px)',duration:.7,ease:'power2.in'},3.5);
+
+// 2 · network size
+tl.to('#globeWrap',{x:390,opacity:1,duration:1.3,ease:'power3.inOut'},3.8);
+tl.to('#stat',{opacity:1,duration:.01},4.1);
+tl.to('#num',{opacity:1,y:0,duration:.8,ease:'power3.out'},4.2);
+tl.to(NUM,{v:15982,duration:1.8,ease:'power2.out'},4.2);
+tl.to(G,{nodes:1,duration:2.2,ease:'power2.out'},4.2);
+tl.to('#stat p',{opacity:1,y:0,duration:.8,ease:'power3.out'},4.9);
+tl.to('#stat',{opacity:0,x:-50,duration:.6,ease:'power2.in'},6.9);
+tl.to('#globeWrap',{x:0,scale:1.6,opacity:.14,duration:1.4,ease:'power3.inOut'},6.9);
+
+// 3 · the real planner arrives
+tl.to('#win',{opacity:1,y:0,rotationX:0,scale:1.1,duration:1.5,ease:'power3.out'},7.2);
+tl.to('.scrim',{opacity:1,duration:.6},8.4);
+tl.set(C,{x:1300,y:760},8.4);tl.to(C,{o:1,duration:.3},8.5);
+
+// 3a · From
+camTo(8.9,P.from.x+30,P.from.y+85,2.15,1.3);
+move(9.0,{x:P.from.x+20,y:P.from.y+4},1.1);
+cap(0,9.1,12.0);
+click(10.1);set(10.1,{fFocus:1});
+tl.to(S,{fTyped:5,duration:.6,ease:'none'},10.25);
+tl.to('#sgFrom',{opacity:1,duration:.3},10.6);
+move(10.95,{x:P.sgF.x-40,y:P.sgF.y+4},.5);
+tl.to('#sgFrom .it .hl',{opacity:1,duration:.2},11.3);
+click(11.55);set(11.6,{fVal:1,fFocus:0});
+tl.to('#sgFrom',{opacity:0,duration:.2},11.6);
+
+// 3b · To
+camTo(11.9,P.to.x+30,P.to.y+70,2.15,1.0);
+move(12.0,{x:P.to.x+30,y:P.to.y+4},.9);
+cap(1,12.2,14.8);
+click(13.0);set(13.0,{tFocus:1});
+tl.to(S,{tTyped:6,duration:.6,ease:'none'},13.15);
+tl.to('#sgTo',{opacity:1,duration:.3},13.5);
+move(13.85,{x:P.sgT.x-40,y:P.sgT.y+4},.45);
+tl.to('#sgTo .it .hl',{opacity:1,duration:.2},14.15);
+click(14.4);set(14.45,{tVal:1,tFocus:0});
+tl.to('#sgTo',{opacity:0,duration:.2},14.45);
+
+// 3c · simulate a disruption
+camTo(14.7,P.scn.x+30,P.scn.y+80,2.0,1.0);
+move(14.8,{x:P.scn.x+60,y:P.scn.y+4},.9);
+cap(2,15.0,17.8);
+click(15.8);set(15.8,{scnFocus:1});
+tl.to('#sgScn',{opacity:1,duration:.25},15.9);
+move(16.2,{x:P.scnOpt.x-30,y:P.scnOpt.y+2},.45);
+tl.to($$('#sgScn .it .hl')[1],{opacity:1,duration:.2},16.5);
+click(16.8);set(16.85,{scnVal:1,scnFocus:0});
+tl.to('#sgScn',{opacity:0,duration:.2},16.85);
+
+// 3d · find routes
+camTo(17.2,P.btn.x+40,P.btn.y-40,1.75,.9);
+move(17.3,{x:P.btn.x+30,y:P.btn.y+4},.8);
+click(18.2);
+tl.to('#findBtn',{scale:.97,duration:.08},18.2).to('#findBtn',{scale:1,duration:.2},18.28);
+tl.to('#fb1',{opacity:0,duration:.12},18.25);tl.to('#fb2',{opacity:1,duration:.12},18.3);
+tl.to(C,{o:0,duration:.3},18.8);
+camTo(18.9,960,540,1,1.2);
+
+// 4 · results
+tl.to('#fb2',{opacity:0,duration:.15},19.5);tl.to('#fb1',{opacity:1,duration:.15},19.6);
+tl.to('#mapEmpty',{opacity:0,scale:.96,duration:.35},19.4);
+tl.to(S,{col:450,duration:.9,ease:'power3.inOut'},19.5);
+tl.to(S,{scroll:P.scrollTo,duration:.9,ease:'power3.inOut'},19.6);
+tl.to('#opts .section-title',{opacity:1,x:0,duration:.5,ease:'power3.out'},19.9);
+tl.to('.option',{opacity:1,x:0,duration:.6,stagger:.12,ease:'power3.out'},20.0);
+tl.to('#op2 .selring',{opacity:1,duration:.3},20.5);
+tl.to('#rin',{opacity:1,x:0,duration:.7,ease:'power3.out'},20.2);
+tl.to('#banner',{opacity:1,duration:.4},19.9);
+tl.to(MAP,{cx:X(58),cy:Y(9),w:1950,duration:1.7,ease:'power3.inOut'},19.5);
+tl.to(R,{mk:1,duration:.4},20.1);
+tl.to(R,{alt:1,duration:.6},20.8);
+tl.to(R,{sel:1,duration:1.8,ease:'power1.inOut'},20.8);
+tl.to(R,{stops:1,duration:.4},22.3);
+cap(3,20.4,23.2);
+
+// 4a · option cards and bands
+camTo(23.3,P.opts.x+40,P.op2.y,1.75,1.1);
+cap(4,23.6,26.4);
+camTo(24.8,P.band.x,P.band.y+50,1.9,1.1);
+
+// 5 · why this wait (SHAP drivers)
+tl.to(S,{rscroll:P.rsDrv,duration:1.1,ease:'power3.inOut'},26.4);
+camTo(26.4,P.drv.x,P.drv.y-P.rsDrv*0+0,1.75,1.1);
+tl.fromTo('.sbar',{scaleX:0},{scaleX:1,duration:.7,stagger:.12,ease:'power3.out',immediateRender:false},27.3);
+cap(5,26.8,29.8);
+
+// 6 · news scan along the route
+tl.to(S,{rscroll:P.rsNews,duration:1.0,ease:'power3.inOut'},29.8);
+camTo(29.8,P.newsBtn.x+120,P.newsBtn.y+150,1.75,1.0);
+tl.set(C,{x:P.newsBtn.x+220,y:P.newsBtn.y+220},30.3);tl.to(C,{o:1,duration:.2},30.4);
+move(30.45,{x:P.newsBtn.x-20,y:P.newsBtn.y+4},.7);
+click(31.25);
+tl.to('#nb1',{opacity:0,duration:.1},31.3);tl.to('#nb2',{opacity:1,duration:.1},31.3);
+tl.to(C,{o:0,duration:.3},31.6);
+tl.to('#nb2',{opacity:0,duration:.1},32.3);tl.to('#nb1',{opacity:1,duration:.1},32.3);
+tl.to('#newsList .intel-item',{opacity:1,y:0,duration:.5,stagger:.2,ease:'power3.out'},32.3);
+camTo(32.4,P.newsList.x,P.newsList.y,1.6,1.1);
+cap(6,30.2,34.6);
+
+// 7 · exports
+tl.to(S,{rscroll:0,duration:1.0,ease:'power3.inOut'},34.6);
+camTo(34.6,P.pdf.x+60,P.pdf.y-60,1.8,1.0);
+tl.set(C,{x:P.pdf.x+150,y:P.pdf.y+160},35.2);tl.to(C,{o:1,duration:.2},35.3);
+move(35.35,{x:P.pdf.x-10,y:P.pdf.y+4},.6);
+click(36.0);
+tl.fromTo('#pdf',{opacity:0,scale:.12,x:(960-60*1.8)-P.pdfEl.x,y:(540+60*1.8)-P.pdfEl.y,rotation:-6},
+  {opacity:1,scale:1,x:0,y:0,rotation:-2,duration:.9,ease:'power3.out',immediateRender:false},36.15);
+tl.to(C,{o:0,duration:.2},36.2);
+cap(7,35.6,39.2);
+tl.to('#pdf',{opacity:0,y:-60,scale:.96,duration:.5,ease:'power2.in'},38.6);
+
+// 8 · watch the route
+tl.set(C,{x:P.watch.x+200,y:P.watch.y+140},38.9);tl.to(C,{o:1,duration:.2},39.0);
+move(39.05,{x:P.watch.x-10,y:P.watch.y+4},.6);
+click(39.8);set(39.85,{watch:1});
+tl.to('#wb1',{opacity:0,duration:.12},39.85);tl.to('#wb2',{opacity:1,duration:.12},39.9);
+cap(8,39.4,41.4);
+
+// 9 · threat simulator: Disruptions page
+camTo(40.6,960,540,1,1.0);
+move(40.8,{x:P.navA.x,y:P.navA.y+4},1.0);
+click(41.9);
+set(41.95,{tab:1});
+tl.to('#viewAlerts',{opacity:1,duration:.35},41.95);
+cap(9,42.2,47.2);
+camTo(42.4,P.scRtm.x,P.scRtm.y+20,1.8,1.1);
+move(42.6,{x:P.golive.x-10,y:P.golive.y+4},1.0);
+click(43.9);
+tl.to('#gl1',{opacity:0,duration:.15},44.0);tl.to('#gl2',{opacity:1,duration:.15},44.0);
+tl.to(['#scRtm .lring','#liveChip','#liveCallout','#endBtn','#markAll','#livePill'],{opacity:1,duration:.35},44.1);
+tl.to('#navCount',{opacity:1,scale:1,duration:.4,ease:'back.out(3)'},44.1);
+set(44.1,{live:1});
+tl.to('#toast',{opacity:1,x:0,duration:.45,ease:'power3.out'},44.5);
+tl.to(C,{o:0,duration:.3},44.4);
+tl.to(S,{pscroll:P.ps,duration:1.1,ease:'power3.inOut'},45.0);
+tl.to('#noAlerts',{opacity:0,duration:.3},45.2);tl.to('#alertItem',{opacity:1,duration:.4},45.3);
+camTo(45.0,P.alertItem.x,P.alertItem.y-P.ps*0,1.5,1.2);
+
+// 10 · alert opens the route
+camTo(47.3,P.toast.x-40,P.toast.y+30,1.85,1.0);
+cap(10,47.6,51.4);
+tl.set(C,{x:P.toast.x-120,y:P.toast.y+160},47.9);tl.to(C,{o:1,duration:.2},48.0);
+move(48.05,{x:P.open.x,y:P.open.y+4},.6);
+click(48.8);
+tl.to('#toast',{opacity:0,x:30,duration:.3},48.9);
+set(48.95,{tab:0});tl.to('#viewAlerts',{opacity:0,duration:.35},48.95);
+tl.to(C,{o:0,duration:.3},49.1);
+camTo(49.1,P.map.x,P.map.y,1.25,1.3);
+
+// 11 · outro
+camTo(51.2,960,540,1,.9);
+tl.to('#win',{opacity:0,scale:.95,y:40,duration:.8,ease:'power2.in'},51.8);
+tl.to('.scrim',{opacity:0,duration:.6},51.8);
+tl.to('#globeWrap',{scale:1.15,opacity:.38,duration:1.8,ease:'power3.inOut'},51.7);
+tl.to('#outro',{opacity:1,duration:.01},52.4);
+tl.to('#outro .o-el',{opacity:1,y:0,duration:.9,stagger:.18,ease:'power3.out'},52.5);
+tl.to({},{duration:.01},57);
+return tl;
+}
+
+/* ---------- player chrome ---------- */
+const pp=$('#pp'),seek=$('#seek'),tNow=$('#tNow'),tDur=$('#tDur'),ctl=$('#ctl'),big=$('#big');
+let tl=null,dragging=false,hideT;
+const fmt=s=>`${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;
+function syncUI(){if(!tl)return;if(!dragging)seek.value=Math.round(tl.progress()*1000);tNow.textContent=fmt(tl.time());}
+function setIcon(p){pp.innerHTML=p?'<svg viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>':'<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';pp.setAttribute('aria-label',p?'Pause':'Play');}
+function play(){if(!tl)return;started=true;if(tl.progress()>=1)tl.restart();else tl.play();big.classList.remove('show');setIcon(true);armHide();}
+function pause(){if(!tl)return;tl.pause();setIcon(false);showCtl();}
+function toggle(){tl&&tl.isActive()?pause():play();}
+function showCtl(){ctl.classList.remove('hide');clearTimeout(hideT);}
+function armHide(){showCtl();hideT=setTimeout(()=>{if(tl&&tl.isActive())ctl.classList.add('hide');},2200);}
+pp.onclick=toggle;big.onclick=play;stage.onclick=toggle;
+$('#rp').onclick=()=>{if(!tl)return;tl.restart();big.classList.remove('show');setIcon(true);};
+$('#fs').onclick=()=>{const v=$('#vp');document.fullscreenElement?document.exitFullscreen():(v.requestFullscreen&&v.requestFullscreen());};
+seek.addEventListener('input',()=>{if(!tl)return;dragging=true;tl.pause();setIcon(false);tl.progress(seek.value/1000);});
+seek.addEventListener('change',()=>{dragging=false;});
+addEventListener('keydown',e=>{if(!tl||(e.target===seek&&e.code!=='Space'))return;
+  if(e.code==='Space'){e.preventDefault();toggle();}
+  if(e.code==='ArrowRight')tl.time(Math.min(tl.duration(),tl.time()+2));
+  if(e.code==='ArrowLeft')tl.time(Math.max(0,tl.time()-2));});
+let started=false;
+addEventListener('mousemove',()=>{if(!started)return;tl&&tl.isActive()?armHide():showCtl();});
+addEventListener('touchstart',()=>{if(!started)return;tl&&tl.isActive()?armHide():showCtl();},{passive:true});
+setIcon(false);
+
+(document.fonts?document.fonts.ready:Promise.resolve()).then(()=>{
+  tl=build();tDur.textContent=fmt(tl.duration());tl.progress(0);render();syncUI();
+  // Embedded on the product page: wait for a click instead of playing out of view.
+  const embedded=window.self!==window.top;
+  if(embedded)ctl.classList.add('hide'); // controls appear once it plays
+  if(embedded||matchMedia('(prefers-reduced-motion: reduce)').matches)big.classList.add('show');else setTimeout(play,500);
+});
+})();
+</script>
+</body>
+</html>
