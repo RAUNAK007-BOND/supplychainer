@@ -1,4 +1,5 @@
-# Render Blueprint for the public Supplychainer demo (free plan: 512 MB RAM, sleeps when idle).
+# Render Blueprint for Supplychainer (free plan: 512 MB RAM, sleeps when idle).
+# / is the public product page; /app/ is the tool, behind username + password sign-in.
 services:
   - type: web
     name: supplychainer
@@ -10,7 +11,27 @@ services:
     envVars:
       - key: PYTHON_VERSION
         value: 3.12.8
-      # No login on the public demo, so webhooks (outbound requests to any URL) are switched off.
+      # Your admin account. Set both in the Render dashboard (they are not stored in git).
+      - key: ADMIN_USERNAME
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      # Signs session cookies; generated once so sign-ins survive restarts.
+      - key: SESSION_SECRET
+        generateValue: true
+      # The free plan's disk is wiped on restart, so accounts created on the Admin page are lost
+      # then. Paste the entry the Admin page shows for each account here (entries separated by ;).
+      - key: SUPPLYCHAINER_USERS
+        sync: false
+      - key: STORAGE_EPHEMERAL
+        value: "true"
+      # Optional: Slack/Discord incoming-webhook URL that receives each access request.
+      - key: ACCESS_REQUEST_WEBHOOK
+        sync: false
+      # Optional: free Open Supply Hub API token for factory-level supplier data (Wikidata otherwise).
+      - key: OSH_API_TOKEN
+        sync: false
+      # Webhooks make the server call arbitrary URLs; keep them off on the shared demo.
       - key: PUBLIC_MODE
         value: "true"
       # PyTorch + the embedding model don't fit in 512 MB; live news falls back to keyword scoring.

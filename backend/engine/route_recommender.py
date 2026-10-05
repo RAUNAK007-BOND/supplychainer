@@ -2,7 +2,8 @@ import networkx as nx
 import math
 import time
 from typing import List, Dict, Any, Optional, Tuple
-from .multimodal_network import MODE_PROFILES, PRIORITY_MULTIPLIERS, create_multimodal_network
+from .multimodal_network import (MODE_PROFILES, PRIORITY_MULTIPLIERS, TRANSFER_PROFILES, _travel_time,
+                                 create_multimodal_network)
 from .threat_intelligence import (ThreatIntelligencePredictor, ContrastiveNLPEngine, CARFFilter,
                                   classify_threat, DIRECT_MODEL_NODES)
 from .news_ingestion import DynamicNewsIngestor
@@ -50,6 +51,9 @@ class RouteRecommender:
         self.resolver = NodeResolver()
         self.hubs = {h["id"]: h for h in self.resolver.hubs}
         self.advisories = scenario_mgr.get_advisories() if hasattr(scenario_mgr, "get_advisories") else {}
+        self.world = None  # WorldRegistry: real ports/airports attached to the graph on demand
+        self._baseline_intel: Dict[str, Tuple[float, str]] = {}
+        self._general_graph = None
 
         print(f"[STARTUP] Initializing Split-Node Global Topology...")
         self.unified_graph = create_multimodal_network()
@@ -92,6 +96,7 @@ class RouteRecommender:
                 score = self.nlp.get_semantic_score(news)
                 verdict = self.carf.assess(score, news, mode)
                 baseline[mode] = (verdict["threat"], news)
+            self._baseline_intel = baseline
             for u, v, d in self.unified_graph.edges(data=True):
                 mode = d.get("transport_mode", "road")
                 if mode == "transfer": continue
@@ -113,6 +118,7 @@ class RouteRecommender:
         keys = [self._ml_key(d, d["base_threat"]) for _, _, d in edges]
         for (_, _, d), band in zip(edges, self.predictor.predict_band_many(keys)):
             d["band"] = band
+        self._general_graph = None  # graph copies hold their own edge dicts; rebuild from the fresh bands
 
     def _ml_key(self, d: Dict[str, Any], threat: float) -> tuple:
         o, dst = d["model_nodes"]
@@ -154,9 +160,106 @@ class RouteRecommender:
             leg["band"] = {q: ed for q in ("p50", "p85", "p95")}
         return leg
 
-    # ------------------------------------------------------------------ solver
-    def _persona_graph(self, avoid_hubs, transport_preference, routing_policy, cargo_type, allow_seasonal=False):
+    # ------------------------------------------------------------------ real-world endpoints
+    def resolve(self, location: str) -> Dict[str, Any]:
+        """Entry virtual node for a core hub / city, or for a real port or airport from the world registry.
+        World records come back with `attach` set: they must be wired into a graph copy before solving."""
+        if self.world is not None and self.world.is_world_id(location):
+            rec = self.world.get(location)
+            if not rec:
+                return {"error": f"Unknown port or airport {location}"}
+            if rec.get("core_alias"):
+                return self.resolver.resolve_node_to_entry_point(rec["core_alias"])
+            feeders = self.world.feeders(rec)
+            if not feeders:
+                return {"error": f"{rec['display_name']} has no connection to the routing network."}
+            modes = {m for _, m, _ in feeders}
+            entry = "road" if "road" in modes else rec["modes"][0]
+            return {"id": f"{rec['id']}:{entry}", "attach": rec, "feeders": feeders}
+        return self.resolver.resolve_node_to_entry_point(location)
+
+    def _attach(self, G, rec: Dict[str, Any], feeders) -> None:
+        """Adds a real port/airport to G with feeder legs to the nearest core hubs (both directions)."""
+        rid = rec["id"]
+        self.hubs.setdefault(rid, {**rec, "parent_city": rec.get("city") or rec["display_name"]})
+        hub = self.hubs[rid]
+        modes = sorted({m for _, m, _ in feeders})
+        for mode in modes:
+            G.add_node(f"{rid}:{mode}", physical_id=rid, display_name=rec["display_name"], type=rec["type"],
+                       country=rec["country"], lat=rec["lat"], lon=rec["lon"], importance=rec["importance"],
+                       mode=mode, parent_city=hub["parent_city"])
+        for i, m1 in enumerate(modes):
+            for m2 in modes[i + 1:]:
+                p = TRANSFER_PROFILES["road_to_sea" if "sea" in (m1, m2) else "road_to_air"]
+                for a, b in ((m1, m2), (m2, m1)):
+                    G.add_edge(f"{rid}:{a}", f"{rid}:{b}", baseline_time=p["delay"], distance=0.1,
+                               transport_mode="transfer", type="transfer", cost=p["cost"], risk=p["risk"],
+                               base_threat=0.0, base_news="", threat_category="none")
+        new_edges = []
+        for core_id, mode, dist in feeders:
+            core_node = f"{core_id}:{mode}"
+            if not G.has_node(core_node):
+                continue
+            dist = max(dist, 1.0)
+            threat, news = self._baseline_intel.get(mode, (0.0, "No live intelligence ingested for this corridor."))
+            core = self.hubs.get(core_id)
+            for a, b, ha, hb in ((f"{rid}:{mode}", core_node, hub, core), (core_node, f"{rid}:{mode}", core, hub)):
+                G.add_edge(a, b, baseline_time=_travel_time(dist, mode), distance=round(dist, 1),
+                           transport_mode=mode, type="transit", cost=dist * MODE_PROFILES[mode]["cost_per_km"],
+                           base_threat=threat, base_news=news,
+                           threat_category=classify_threat(news)["category"] if threat > 0 else "none",
+                           model_nodes=(self.predictor.model_node_for(ha, mode, "origin"),
+                                        self.predictor.model_node_for(hb, mode, "destination")),
+                           dwell=not (hb and hb.get("type") == "choke_point" and hb["id"] not in DIRECT_MODEL_NODES))
+                new_edges.append(G[a][b])
+        if new_edges:
+            for d, band in zip(new_edges, self.predictor.predict_band_many(
+                    [self._ml_key(d, d["base_threat"]) for d in new_edges])):
+                d["band"] = band
+
+    def _base_graph(self, *resolved):
+        attach = [r for r in resolved if r.get("attach")]
+        if not attach:
+            return self.unified_graph
         G = self.unified_graph.copy()
+        for r in attach:
+            self._attach(G, r["attach"], r["feeders"])
+        return G
+
+    def quick_route(self, source: str, destination: str, disruptions: Dict[str, Any] = None,
+                    persona: str = "BALANCED") -> Dict[str, Any]:
+        """One persona, general cargo, no explanation: the cheap path used to score many suppliers at once."""
+        rs, rd = self.resolve(source), self.resolve(destination)
+        if "error" in rs: return {"error": rs["error"]}
+        if "error" in rd: return {"error": rd["error"]}
+        if rs["id"] == rd["id"]:
+            return {"eta_band": {"p50": 0.0, "p85": 0.0, "p95": 0.0}, "adjusted_eta": 0.0, "total_cost": 0.0,
+                    "threat_level": 0.0, "hubs": [rs["id"].split(":")[0]], "legs": [], "exposed_disruptions": [],
+                    "primary_mode": "ROAD"}
+        if not self._bands_ready:
+            self._precompute_bands()
+        if self._general_graph is None:
+            # Built once: general cargo with no preference never drops an edge, only seasonal lanes.
+            self._general_graph = self._persona_graph([], "any", "STRICT", "general")
+        G = self._general_graph
+        if rs.get("attach") or rd.get("attach"):
+            G = G.copy()
+            for r in (rs, rd):
+                if r.get("attach"):
+                    self._attach(G, r["attach"], r["feeders"])
+        try:
+            path = self._solve(G, rs["id"], rd["id"], persona, disruptions or {}, "any", "STRICT", "normal")
+        except (nx.NetworkXNoPath, nx.NodeNotFound):
+            return {"error": "No route found."}
+        cand = self._compose(G, path, persona, disruptions or {})
+        for l in cand["legs"]:
+            l.pop("_ml_key", None)
+        return cand
+
+    # ------------------------------------------------------------------ solver
+    def _persona_graph(self, avoid_hubs, transport_preference, routing_policy, cargo_type, allow_seasonal=False,
+                       base=None):
+        G = (base if base is not None else self.unified_graph).copy()
         excluded = set(avoid_hubs) | (set() if allow_seasonal else SEASONAL_HUBS)
         for hub_id in excluded:
             G.remove_nodes_from([n for n, d in G.nodes(data=True) if d.get("physical_id") == hub_id])
@@ -317,14 +420,15 @@ class RouteRecommender:
         max_delay = overrides.get("max_delay", 9999) or 9999  # days
 
         # 1. Resolve Entry/Exit (Virtual Nodes)
-        res_s = self.resolver.resolve_node_to_entry_point(source)
-        res_d = self.resolver.resolve_node_to_entry_point(destination)
+        res_s = self.resolve(source)
+        res_d = self.resolve(destination)
 
         if "error" in res_s: return {"error": res_s["error"]}
         if "error" in res_d: return {"error": res_d["error"]}
         s_vnode, d_vnode = res_s["id"], res_d["id"]
         if s_vnode == d_vnode:
             return {"error": "Origin and destination resolve to the same hub."}
+        base_graph = self._base_graph(res_s, res_d)
 
         if not self._bands_ready:
             self._precompute_bands()
@@ -338,7 +442,8 @@ class RouteRecommender:
         for persona in PERSONAS:
             try:
                 G_p = self._persona_graph(avoid_hubs, transport_preference, routing_policy, cargo_type,
-                                          allow_seasonal=bool(overrides.get("allow_seasonal_lanes")))
+                                          allow_seasonal=bool(overrides.get("allow_seasonal_lanes")),
+                                          base=base_graph)
                 path = self._solve(G_p, s_vnode, d_vnode, persona, disruptions,
                                    transport_preference, routing_policy, priority)
                 cand = self._compose(G_p, path, persona, disruptions)

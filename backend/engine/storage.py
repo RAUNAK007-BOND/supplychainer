@@ -58,6 +58,30 @@ CREATE TABLE IF NOT EXISTS platform_state (
     key TEXT PRIMARY KEY,
     value TEXT
 );
+
+CREATE TABLE IF NOT EXISTS users (
+    username TEXT PRIMARY KEY,
+    password_hash TEXT NOT NULL,
+    display_name TEXT,
+    email TEXT,
+    is_admin INTEGER NOT NULL DEFAULT 0,
+    active INTEGER NOT NULL DEFAULT 1,
+    created_at REAL NOT NULL,
+    last_login REAL,
+    request_id INTEGER
+);
+
+CREATE TABLE IF NOT EXISTS access_requests (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    created_at REAL NOT NULL,
+    name TEXT NOT NULL,
+    email TEXT NOT NULL,
+    company TEXT,
+    use_case TEXT,
+    status TEXT NOT NULL DEFAULT 'pending',
+    username TEXT,
+    ip TEXT
+);
 """
 
 
@@ -214,3 +238,72 @@ class Storage:
         with self._conn() as c:
             c.execute("INSERT INTO platform_state (key, value) VALUES (?,?) "
                       "ON CONFLICT(key) DO UPDATE SET value=excluded.value", (key, value))
+
+    # ------------------------------------------------------------------ users
+    @staticmethod
+    def _user_row(r) -> Dict[str, Any]:
+        return {"username": r["username"], "password_hash": r["password_hash"], "display_name": r["display_name"],
+                "email": r["email"], "is_admin": bool(r["is_admin"]), "active": bool(r["active"]),
+                "created_at": r["created_at"], "last_login": r["last_login"], "request_id": r["request_id"]}
+
+    def get_user(self, username: str) -> Optional[Dict[str, Any]]:
+        with self._conn() as c:
+            r = c.execute("SELECT * FROM users WHERE username=?", (username,)).fetchone()
+        return self._user_row(r) if r else None
+
+    def list_users(self) -> List[Dict[str, Any]]:
+        with self._conn() as c:
+            return [self._user_row(r) for r in c.execute("SELECT * FROM users ORDER BY created_at DESC").fetchall()]
+
+    def add_user(self, username: str, password_hash: str, display_name: str = None, email: str = None,
+                 is_admin: bool = False, request_id: int = None) -> bool:
+        with self._conn() as c:
+            try:
+                c.execute("INSERT INTO users (username, password_hash, display_name, email, is_admin, created_at, request_id)"
+                          " VALUES (?,?,?,?,?,?,?)",
+                          (username, password_hash, display_name, email, int(is_admin), time.time(), request_id))
+                return True
+            except sqlite3.IntegrityError:
+                return False
+
+    def update_user(self, username: str, **fields) -> bool:
+        allowed = {"password_hash", "display_name", "email", "is_admin", "active", "last_login"}
+        sets = [(k, int(v) if isinstance(v, bool) else v) for k, v in fields.items() if k in allowed and v is not None]
+        if not sets:
+            return False
+        with self._conn() as c:
+            cur = c.execute(f"UPDATE users SET {', '.join(k + '=?' for k, _ in sets)} WHERE username=?",
+                            (*[v for _, v in sets], username))
+            return cur.rowcount > 0
+
+    def delete_user(self, username: str) -> bool:
+        with self._conn() as c:
+            return c.execute("DELETE FROM users WHERE username=?", (username,)).rowcount > 0
+
+    # ------------------------------------------------------------------ access requests
+    @staticmethod
+    def _request_row(r) -> Dict[str, Any]:
+        return {k: r[k] for k in ("id", "created_at", "name", "email", "company", "use_case", "status", "username")}
+
+    def add_access_request(self, name: str, email: str, company: str, use_case: str, ip: str) -> Dict[str, Any]:
+        with self._conn() as c:
+            cur = c.execute("INSERT INTO access_requests (created_at, name, email, company, use_case, ip)"
+                            " VALUES (?,?,?,?,?,?)", (time.time(), name, email, company, use_case, ip))
+            rid = cur.lastrowid
+            r = c.execute("SELECT * FROM access_requests WHERE id=?", (rid,)).fetchone()
+        return self._request_row(r)
+
+    def list_access_requests(self, status: Optional[str] = None) -> List[Dict[str, Any]]:
+        q = "SELECT * FROM access_requests" + (" WHERE status=?" if status else "") + " ORDER BY created_at DESC"
+        with self._conn() as c:
+            return [self._request_row(r) for r in c.execute(q, (status,) if status else ()).fetchall()]
+
+    def get_access_request(self, rid: int) -> Optional[Dict[str, Any]]:
+        with self._conn() as c:
+            r = c.execute("SELECT * FROM access_requests WHERE id=?", (rid,)).fetchone()
+        return self._request_row(r) if r else None
+
+    def update_access_request(self, rid: int, status: str, username: Optional[str] = None) -> bool:
+        with self._conn() as c:
+            return c.execute("UPDATE access_requests SET status=?, username=COALESCE(?, username) WHERE id=?",
+                             (status, username, rid)).rowcount > 0

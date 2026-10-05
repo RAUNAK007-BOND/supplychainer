@@ -1,5 +1,5 @@
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Query, HTTPException
-from fastapi.responses import Response, JSONResponse, FileResponse
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Query, HTTPException, Request
+from fastapi.responses import Response, JSONResponse, FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 from typing import Optional, List
@@ -7,16 +7,24 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 import asyncio
 import json
+import mimetypes
 import os
+import threading
+import time
 from contextlib import asynccontextmanager
 
+import httpx
 from fastapi.middleware.cors import CORSMiddleware
 from .engine.threat_intelligence import ThreatIntelligencePredictor, classify_threat, keyword_severity
 from .engine.multimodal_network import load_canonical_hubs
 from .engine.route_recommender import RouteRecommender
 from .engine.scenario_manager import ScenarioManager
 from .engine.supplier_scorer import SupplierScorer
+from .engine.supplier_sources import SupplierDirectory, SupplierSourceError
+from .engine.world_registry import WorldRegistry
+from .engine.live_conditions import LiveConditions
 from .engine.storage import Storage
+from .engine.auth import AuthManager, COOKIE_NAME, SESSION_DAYS, generate_password, hash_password, normalize_username
 from .engine.integrations import AlertEngine, WebhookDispatcher, export_csv, export_pdf, export_tms
 
 # Global Engine State
@@ -31,12 +39,26 @@ PUBLIC_MODE = os.getenv("PUBLIC_MODE", "false").lower() == "true"  # shared publ
 recommender = RouteRecommender(None, predictor, None, scenario_mgr, demo_mode=DEMO_MODE)
 canonical_hubs = load_canonical_hubs()
 hub_index = {h["id"]: h for h in canonical_hubs}
-supplier_scorer = SupplierScorer(os.path.join(os.path.dirname(__file__), 'data', 'suppliers.json'))
+world = WorldRegistry(canonical_hubs)          # every real port (UN/LOCODE + WPI) and airport (OurAirports)
+recommender.world = world
+conditions = LiveConditions()                  # live weather at ports (Open-Meteo)
+supplier_directory = SupplierDirectory()       # live suppliers (Open Supply Hub, Wikidata fallback)
+supplier_scorer = SupplierScorer(supplier_directory, recommender, world, conditions)
 
 storage = Storage()
+auth = AuthManager(storage)
 dispatcher = WebhookDispatcher(storage)
 alert_engine = AlertEngine(storage, recommender, scenario_mgr, dispatcher)
 scenario_mgr.activate_scenario(storage.get_state("live_scenario"))  # survives restarts
+# Render free (and similar) wipe the disk on restart: DB-created accounts would not survive.
+STORAGE_EPHEMERAL = os.getenv("STORAGE_EPHEMERAL", "").lower() == "true" or \
+    os.path.abspath(storage.path).replace("\\", "/").startswith("/tmp/")
+
+
+def lookup_hub(hub_id: str):
+    """Core hub, or a real port/airport from the world registry."""
+    return hub_index.get(hub_id) or recommender.hubs.get(hub_id) or (
+        WorldRegistry.public(world.get(hub_id)) if world.get(hub_id) else None)
 
 
 class RecommendRequest(BaseModel):
@@ -54,10 +76,40 @@ class RecommendRequest(BaseModel):
 
 class SourcingRequest(BaseModel):
     category: str = "Electronics"
+    destination: str = "PORT-ROTTERDAM"   # where the goods must arrive: core hub or real port/airport id
+    country: Optional[str] = Field(None, pattern=r"^[A-Za-z]{2}$")  # only suppliers in this ISO country
+    limit: int = Field(15, ge=3, le=30)
     current_inventory: int = 1000
     safety_stock: int = 1500
     demand_forecast: int = 800
     scenario: Optional[str] = None
+
+class LoginBody(BaseModel):
+    username: str = Field(..., max_length=80)
+    password: str = Field(..., max_length=200)
+
+class AccessRequestBody(BaseModel):
+    name: str = Field(..., min_length=2, max_length=120)
+    email: str = Field(..., pattern=r"^[^@\s]+@[^@\s]+\.[^@\s]+$", max_length=200)
+    company: Optional[str] = Field(None, max_length=160)
+    use_case: Optional[str] = Field(None, max_length=2000)
+    website: Optional[str] = None  # honeypot: real people never see or fill this field
+
+class UserCreate(BaseModel):
+    username: str
+    password: Optional[str] = Field(None, min_length=8, max_length=200)
+    display_name: Optional[str] = Field(None, max_length=120)
+    email: Optional[str] = Field(None, max_length=200)
+    is_admin: bool = False
+    request_id: Optional[int] = None
+
+class UserUpdate(BaseModel):
+    active: Optional[bool] = None
+    is_admin: Optional[bool] = None
+    display_name: Optional[str] = Field(None, max_length=120)
+
+class RequestUpdate(BaseModel):
+    status: str = Field(..., pattern=r"^(pending|declined|approved)$")
 
 class RunUpdate(BaseModel):
     watched: Optional[bool] = None
@@ -81,9 +133,32 @@ async def lifespan(app: FastAPI):
     print("Supplychainer Engine Active: Canonical Global Registry Loaded.")
     if not DEMO_MODE:
         asyncio.create_task(asyncio.to_thread(recommender.run_background_warmup))
+    world.refresh_in_background_if_stale()
     yield
 
 app = FastAPI(title="Supplychainer API", version="2.0.0", lifespan=lifespan)
+
+# Paths anyone may call without signing in (the product page, the login form, access requests).
+PUBLIC_API = {"/api/health", "/api/auth/login", "/api/auth/logout", "/api/auth/me", "/api/access-requests"}
+
+
+def _client_ip(request) -> str:
+    fwd = request.headers.get("x-forwarded-for", "")
+    return fwd.split(",")[0].strip() if fwd else (request.client.host if request.client else "?")
+
+
+@app.middleware("http")
+async def require_login(request: Request, call_next):
+    path = request.url.path
+    if path.startswith("/api/") and path not in PUBLIC_API and not path.startswith("/api/public/"):
+        user = auth.verify(request.cookies.get(COOKIE_NAME))
+        if not user:
+            return JSONResponse({"detail": "Sign in to use Supplychainer."}, status_code=401)
+        if path.startswith("/api/admin/") and not user["is_admin"]:
+            return JSONResponse({"detail": "Admins only."}, status_code=403)
+        request.state.user = user
+    return await call_next(request)
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -106,6 +181,223 @@ def _live_scenario():
     return scenario_mgr.get(scenario_mgr.active_scenario_id)
 
 
+# ============================================================================ auth
+def _set_session(response: Response, request: Request, user) -> None:
+    secure = request.headers.get("x-forwarded-proto", request.url.scheme) == "https"
+    response.set_cookie(COOKIE_NAME, auth.issue(user), max_age=int(SESSION_DAYS * 86400), httponly=True,
+                        samesite="lax", secure=secure, path="/")
+
+
+@app.post("/api/auth/login")
+def login(body: LoginBody, request: Request, response: Response):
+    result = auth.authenticate(body.username, body.password, _client_ip(request))
+    if "error" in result:
+        raise HTTPException(result["status"], result["error"])
+    _set_session(response, request, result["user"])
+    return {"user": auth.public_user(result["user"])}
+
+
+@app.post("/api/auth/logout")
+def logout(response: Response):
+    response.delete_cookie(COOKIE_NAME, path="/")
+    return {"ok": True}
+
+
+@app.get("/api/auth/me")
+def me(request: Request):
+    user = auth.verify(request.cookies.get(COOKIE_NAME))
+    if not user:
+        raise HTTPException(401, "Not signed in.")
+    return {"user": auth.public_user(user)}
+
+
+# ============================================================================ access requests (public)
+_request_times: dict = {}
+_request_lock = threading.Lock()
+
+
+def _notify_access_request(req: dict) -> None:
+    url = os.getenv("ACCESS_REQUEST_WEBHOOK", "").strip()
+    if not url:
+        return
+    text = (f"New Supplychainer access request #{req['id']}: {req['name']} <{req['email']}>"
+            f"{' - ' + req['company'] if req.get('company') else ''}\n{req.get('use_case') or ''}")
+    try:  # Slack ("text") and Discord ("content") both accept this body
+        httpx.post(url, json={"text": text, "content": text[:1900]}, timeout=8)
+    except Exception as e:
+        print(f"[ACCESS] Notification failed: {e}")
+
+
+@app.post("/api/access-requests")
+def create_access_request(body: AccessRequestBody, request: Request):
+    if body.website:  # honeypot filled in: a bot. Pretend it worked.
+        return {"ok": True}
+    ip = _client_ip(request)
+    now = time.time()
+    with _request_lock:
+        recent = [t for t in _request_times.get(ip, []) if now - t < 3600]
+        if len(recent) >= 5:
+            raise HTTPException(429, "Too many requests from this network. Please try again later.")
+        _request_times[ip] = recent + [now]
+    req = storage.add_access_request(body.name.strip(), body.email.strip().lower(), (body.company or "").strip() or None,
+                                     (body.use_case or "").strip() or None, ip)
+    threading.Thread(target=_notify_access_request, args=(req,), daemon=True).start()
+    return {"ok": True}
+
+
+# ============================================================================ admin
+def _env_entry(username: str, password_hash: str) -> str:
+    return f"{username}:{password_hash}"
+
+
+@app.get("/api/admin/overview")
+def admin_overview():
+    return {
+        "requests": storage.list_access_requests(),
+        "users": [auth.public_user(u) for u in auth.list_users()],
+        "storage_ephemeral": STORAGE_EPHEMERAL,
+        "admin_username": auth.admin_username,
+        "suppliers": supplier_directory.info(),
+        "world": world.status(),
+        "notify_webhook": bool(os.getenv("ACCESS_REQUEST_WEBHOOK")),
+    }
+
+
+@app.post("/api/admin/users")
+def admin_create_user(body: UserCreate):
+    try:
+        username = normalize_username(body.username)
+    except ValueError as e:
+        raise HTTPException(400, str(e))
+    if auth.get_user(username):
+        raise HTTPException(409, f"The username {username} is taken.")
+    req = storage.get_access_request(body.request_id) if body.request_id else None
+    password = body.password or generate_password()
+    pw_hash = hash_password(password)
+    storage.add_user(username, pw_hash, display_name=body.display_name or (req or {}).get("name"),
+                     email=body.email or (req or {}).get("email"), is_admin=body.is_admin,
+                     request_id=body.request_id)
+    if req:
+        storage.update_access_request(req["id"], "approved", username)
+    return {"user": auth.public_user(auth.get_user(username)), "password": password,
+            "env_entry": _env_entry(username, pw_hash), "storage_ephemeral": STORAGE_EPHEMERAL}
+
+
+def _db_user_or_404(username: str):
+    u = storage.get_user(username)
+    if not u:
+        if username in auth.env_users:
+            raise HTTPException(400, "This account comes from the SUPPLYCHAINER_USERS env var; change it there.")
+        raise HTTPException(404, "User not found")
+    return u
+
+
+@app.patch("/api/admin/users/{username}")
+def admin_update_user(username: str, body: UserUpdate, request: Request):
+    _db_user_or_404(username)
+    if username == request.state.user["username"] and (body.active is False or body.is_admin is False):
+        raise HTTPException(400, "You can't disable or demote your own account.")
+    storage.update_user(username, active=body.active, is_admin=body.is_admin, display_name=body.display_name)
+    return {"user": auth.public_user(auth.get_user(username))}
+
+
+@app.post("/api/admin/users/{username}/reset-password")
+def admin_reset_password(username: str):
+    _db_user_or_404(username)
+    password = generate_password()
+    pw_hash = hash_password(password)
+    storage.update_user(username, password_hash=pw_hash)
+    return {"password": password, "env_entry": _env_entry(username, pw_hash), "storage_ephemeral": STORAGE_EPHEMERAL}
+
+
+@app.delete("/api/admin/users/{username}")
+def admin_delete_user(username: str, request: Request):
+    _db_user_or_404(username)
+    if username == request.state.user["username"]:
+        raise HTTPException(400, "You can't delete your own account.")
+    storage.delete_user(username)
+    return {"deleted": username}
+
+
+@app.patch("/api/admin/requests/{request_id}")
+def admin_update_request(request_id: int, body: RequestUpdate):
+    if not storage.update_access_request(request_id, body.status):
+        raise HTTPException(404, "Request not found")
+    return storage.get_access_request(request_id)
+
+
+# ============================================================================ public (product page)
+@app.get("/api/public/stats")
+def public_stats():
+    ws = world.status()
+    G = recommender.unified_graph
+    return {
+        "ports": ws["ports"], "airports": ws["airports"], "countries": ws["countries"],
+        "core_hubs": len(canonical_hubs),
+        "lanes": sum(1 for _, _, d in G.edges(data=True) if d.get("type") == "transit") // 2,
+        "scenarios": len(scenario_mgr.get_all_scenarios()),
+        "quantiles": sorted(predictor.models) or ["p50", "p85", "p95"],
+        "engine_status": _engine_status(),
+        "registry_updated_at": ws["generated_at"],
+        "data_sources": ws["sources"] + [
+            {"key": "openmeteo", "name": "Open-Meteo", "url": "https://open-meteo.com"},
+            {"key": "news", "name": "Google News RSS", "url": "https://news.google.com"},
+            {"key": "suppliers", "name": supplier_directory.info()["primary"] or "Wikidata",
+             "url": "https://opensupplyhub.org" if supplier_directory.primary else "https://www.wikidata.org"},
+        ],
+    }
+
+
+_example_cache: dict = {}
+
+
+@app.get("/api/public/example")
+def public_example():
+    """A real plan (Shanghai -> Rotterdam during the Suez blockage) for the product page, cached for an hour."""
+    if _example_cache.get("at", 0) < time.time() - 3600 or _example_cache.get("warm") != recommender.is_warmed_up:
+        out = recommender.recommend("PORT-SHANGHAI", "PORT-ROTTERDAM", scenario="SUEZ_BLOCK", explain=False)
+        if "error" in out:
+            raise HTTPException(503, out["error"])
+        routes = []
+        for r in out["recommendations"]:
+            transit = [l for l in r["legs"] if l["type"] == "transit"]
+            via = [l["to_name"] for l in transit[:-1] if l.get("to_type") in ("choke_point", "port", "airport", "rail_hub")]
+            routes.append({"personas": r["personas"], "eta_p85_h": r["adjusted_eta"], "eta_band": r["eta_band"],
+                           "mode": r["primary_mode"], "via": via[:2], "cost": r["total_cost"],
+                           "rerouted": (r.get("scenario_impact") or {}).get("rerouted", False),
+                           "delta_eta_h": (r.get("scenario_impact") or {}).get("delta_eta")})
+        _example_cache.update(at=time.time(), warm=recommender.is_warmed_up,
+                              data={"origin": "Shanghai", "destination": "Rotterdam", "scenario": out["active_scenario"],
+                                    "routes": routes, "solve_ms": out["engine"]["solve_ms"]})
+    return _example_cache["data"]
+
+
+_globe_cache: dict = {}
+
+
+@app.get("/api/public/globe")
+def public_globe():
+    """Compact point cloud of every real port and airport plus the core sea/air lanes, for the 3D globe."""
+    key = world.doc["generated_at"]
+    if _globe_cache.get("key") != key:
+        ports = [[round(p["lat"], 2), round(p["lon"], 2), p["importance"]] for p in world.doc["ports"]]
+        airports = [[round(a["lat"], 2), round(a["lon"], 2)] for a in world.doc["airports"]]
+        lanes, seen = [], set()
+        for u, v, d in recommender.unified_graph.edges(data=True):
+            if d.get("type") != "transit" or d["transport_mode"] not in ("sea", "air"):
+                continue
+            pu, pv = recommender.unified_graph.nodes[u]["physical_id"], recommender.unified_graph.nodes[v]["physical_id"]
+            k = (min(pu, pv), max(pu, pv))
+            if k in seen or d.get("distance", 0) < 800:
+                continue
+            seen.add(k)
+            a, b = hub_index[pu], hub_index[pv]
+            lanes.append([round(a["lat"], 2), round(a["lon"], 2), round(b["lat"], 2), round(b["lon"], 2),
+                          d["transport_mode"][0]])
+        _globe_cache.update(key=key, data={"ports": ports, "airports": airports, "lanes": lanes})
+    return JSONResponse(_globe_cache["data"], headers={"Cache-Control": "public, max-age=3600"})
+
+
 # ============================================================================ reference data
 @app.get("/api/health")
 def health():
@@ -122,8 +414,8 @@ def get_hubs():
     return canonical_hubs
 
 @app.get("/api/hubs/search")
-def search_hubs(q: str = Query(..., min_length=1), limit: int = 25):
-    """Search hubs by display_name, aliases, city, or country (best matches first)."""
+def search_hubs(q: str = Query(..., min_length=1), limit: int = 25, world_results: bool = True):
+    """Search the core hubs, then every real port and airport (best matches first)."""
     q = q.lower().strip()
     scored = []
     for hub in canonical_hubs:
@@ -134,7 +426,27 @@ def search_hubs(q: str = Query(..., min_length=1), limit: int = 25):
         rank = 0 if any(f.startswith(q) for f in fields) else 1
         scored.append((rank, -hub.get("importance", 5), hub["display_name"], hub))
     scored.sort(key=lambda x: x[:3])
-    return [h for *_, h in scored[:limit]]
+    core = [h for *_, h in scored[:limit]]
+    if not world_results or len(core) >= limit:
+        return core
+    # Real ports/airports that are the same place as a core hub are already covered by it.
+    extra = [r for r in world.search(q, limit=limit * 2) if not r.get("core_alias")]
+    return core + extra[:limit - len(core)]
+
+
+@app.get("/api/world/status")
+def world_status():
+    return world.status()
+
+
+@app.get("/api/conditions/{hub_id}")
+def hub_conditions(hub_id: str):
+    """Live weather (and sea state for ports) at a hub, port or airport."""
+    hub = lookup_hub(hub_id)
+    if not hub or hub.get("lat") is None:
+        raise HTTPException(404, "Unknown hub")
+    return {"hub": hub_id, "name": hub["display_name"],
+            **conditions.at(hub["lat"], hub["lon"], marine=hub.get("type") == "port")}
 
 @app.get("/api/network")
 def get_network():
@@ -176,6 +488,9 @@ def get_model_info():
 
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
+    if not auth.verify(websocket.cookies.get(COOKIE_NAME)):
+        await websocket.close(code=4401)
+        return
     await websocket.accept()
     last_alert = storage.latest_alert_id()
     try:
@@ -275,7 +590,12 @@ def export_run(run_id: str, format: str = Query("csv", pattern="^(csv|pdf|tms)$"
     if format == "pdf":
         return Response(export_pdf(run, index), media_type="application/pdf",
                         headers={"Content-Disposition": f'attachment; filename="{stem}.pdf"'})
-    return JSONResponse(export_tms(run, index, hubs=hub_index),
+    hubs = {**recommender.hubs, **hub_index}
+    for leg in run["response"].get("recommendations", [{}])[index].get("legs", []):
+        for hid in (leg["from"], leg["to"]):
+            if hid not in hubs and lookup_hub(hid):
+                hubs[hid] = lookup_hub(hid)
+    return JSONResponse(export_tms(run, index, hubs=hubs),
                         headers={"Content-Disposition": f'attachment; filename="{stem}.tms.json"'})
 
 # ============================================================================ live disruption + alerts
@@ -347,10 +667,10 @@ def test_webhooks():
 @app.post("/api/intel/scan")
 def intel_scan(body: IntelScan):
     """Live news scan for a route's hubs: Google News RSS -> contrastive NLP -> CARF -> threat type."""
-    targets = [h for h in dict.fromkeys(body.hubs) if h in hub_index][:8]
+    targets = [h for h in dict.fromkeys(body.hubs) if lookup_hub(h)][:8]
 
     def scan(hid):
-        hub = hub_index[hid]
+        hub = lookup_hub(hid)
         mode = body.mode if body.mode in hub["modes"] else hub["modes"][0]
         place = hub.get("parent_city") or hub["display_name"]
         intel = recommender.news_ingestor.get_intel(place, mode)
@@ -376,27 +696,53 @@ def intel_scan(body: IntelScan):
 def supplier_categories():
     return supplier_scorer.categories()
 
+@app.get("/api/suppliers/sources")
+def supplier_sources():
+    return supplier_directory.info()
+
 @app.post("/api/suppliers")
 def get_suppliers(req: SourcingRequest):
     # Stateless: the what-if scenario no longer overwrites the platform-wide live scenario.
+    if req.category not in supplier_scorer.categories():
+        raise HTTPException(400, f"Unknown category {req.category}")
+    if "error" in recommender.resolve(req.destination):
+        raise HTTPException(400, f"Unknown destination {req.destination}")
     active_disruptions = scenario_mgr.get_disruptions(req.scenario)
-    ranked_suppliers = supplier_scorer.get_ranked_suppliers(req.category, active_disruptions)
+    try:
+        ranked = supplier_scorer.rank(req.category, req.destination, iso=req.country,
+                                      disruptions=active_disruptions, limit=req.limit)
+    except SupplierSourceError as e:
+        raise HTTPException(502, f"Live supplier data is unavailable right now: {e}")
     advice = supplier_scorer.get_procurement_advice(req.current_inventory, req.safety_stock, req.demand_forecast,
-                                                    ranked=ranked_suppliers)
+                                                    ranked=ranked["suppliers"])
+    dest = lookup_hub(req.destination)
     return {
-        "suppliers": ranked_suppliers,
+        **ranked,
+        "destination": {"id": req.destination, "name": dest["display_name"] if dest else req.destination},
         "advice": advice,
-        "active_disruptions": active_disruptions
+        "active_disruptions": active_disruptions,
     }
 
 # ============================================================================ built frontend (single-process deploy)
-FRONTEND_DIST = os.path.join(os.path.dirname(__file__), "..", "frontend", "dist")
+# dist/index.html is the public product page; dist/app/index.html is the signed-in tool.
+# Windows can map .js to text/plain, which browsers refuse for service workers.
+mimetypes.add_type("text/javascript", ".js")
+mimetypes.add_type("application/manifest+json", ".webmanifest")
+FRONTEND_DIST = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "frontend", "dist"))
 if os.path.isdir(os.path.join(FRONTEND_DIST, "assets")):
     app.mount("/assets", StaticFiles(directory=os.path.join(FRONTEND_DIST, "assets")), name="assets")
 
+    @app.get("/app", include_in_schema=False)
+    def app_root():
+        return RedirectResponse("/app/")
+
     @app.get("/{full_path:path}", include_in_schema=False)
     def spa(full_path: str):
-        candidate = os.path.join(FRONTEND_DIST, full_path)
-        if full_path and os.path.isfile(candidate):
-            return FileResponse(candidate)
+        candidate = os.path.abspath(os.path.join(FRONTEND_DIST, full_path))
+        if full_path and candidate.startswith(FRONTEND_DIST) and os.path.isfile(candidate):
+            # The service worker must be revalidated on every load, or app updates stall.
+            headers = {"Cache-Control": "no-cache"} if full_path.endswith(("sw.js", ".webmanifest")) else None
+            return FileResponse(candidate, headers=headers)
+        if full_path.startswith("app/") or full_path in ("login", "admin"):
+            return FileResponse(os.path.join(FRONTEND_DIST, "app", "index.html"))
         return FileResponse(os.path.join(FRONTEND_DIST, "index.html"))
